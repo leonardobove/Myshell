@@ -1,0 +1,491 @@
+\hypertarget{myshell_8c}{}\doxysection{src/myshell.c File Reference}
+\label{myshell_8c}\index{src/myshell.c@{src/myshell.c}}
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$signal.\+h$>$}\newline
+{\ttfamily \#include $<$limits.\+h$>$}\newline
+{\ttfamily \#include $<$sys/wait.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{myshell_8c_ae711e07378a40de753b6275a837c9200}{default\+\_\+name}}~\char`\"{}guest\char`\"{}
+\item 
+\#define \mbox{\hyperlink{myshell_8c_accdbea14ea06c15e271784368bd993e8}{PROMPT}}~\char`\"{}@myshell\# \char`\"{}
+\item 
+\#define \mbox{\hyperlink{myshell_8c_abe2fedc3a963bcd397037e60e16adabb}{filename}}~\char`\"{}/mainv2\char`\"{}
+\item 
+\#define \mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\+\_\+\+BUFF}}~256
+\item 
+\#define \mbox{\hyperlink{myshell_8c_a2e7620041ccf5bc13755c9f28524d22e}{MAX\+\_\+\+ARG}}~20
+\item 
+\#define \mbox{\hyperlink{myshell_8c_a844f4739306016d5b999690b18f25a45}{H\+\_\+\+READ}}~-\/1
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{myshell_8c_a4b515337891f74ebd79cb307db16bf33}{sigint\+\_\+handler}} (int signo)
+\begin{DoxyCompactList}\small\item\em This functions handles the CTRL+C interrupt (SIGINT). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{setup}} (int, char $\ast$$\ast$)
+\item 
+void \mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\begin{DoxyCompactList}\small\item\em This function repeats, until termination of the process, the tasks of the shell\+: reads the command, executes it and shows again the prompr, ready for the next command, eventually displaying an error message. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}{update\+\_\+path}} (char $\ast$argv0)
+\begin{DoxyCompactList}\small\item\em This function updates the local variable PATH of the process to the absolute path of the bin folder, where all the executable files can be found. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}{exit\+\_\+command}} (void)
+\begin{DoxyCompactList}\small\item\em This functions handles the exit command (greets the user). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\+\_\+error}} (const char $\ast$)
+\item 
+void \mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{clear\+\_\+args}} (char $\ast$$\ast$args)
+\begin{DoxyCompactList}\small\item\em This function clears the dynamic array of strings, made to hold the arguments. \end{DoxyCompactList}\item 
+char $\ast$ \mbox{\hyperlink{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}{read\+\_\+command}} (char $\ast$stdin\+\_\+buff)
+\begin{DoxyCompactList}\small\item\em This function reads one line from stdin and stores it in a string. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}{parse\+\_\+command}} (char $\ast$string, char $\ast$$\ast$args\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em This function parses the string read on stdin and collects the name of the command and the arguments that the user wants to execute. In addition, it prepares the arguments\textquotesingle{} array, which will be sent to the child process. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{prepare\+\_\+history}} (const int, const char $\ast$, const char $\ast$, char $\ast$$\ast$)
+\item 
+int \mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\+\_\+command}} (char $\ast$$\ast$)
+\item 
+int \mbox{\hyperlink{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}{cd}} (char $\ast$$\ast$)
+\item 
+int \mbox{\hyperlink{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main function\+: after setting up the new PATH, it calls the \mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{setup()}} and \mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{loop()}} functions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{myshell_8c_a2b23bc0fe65aa619800183c7b031be9e}{setup}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function checks if the right number of arguments was passed by the user, tries to register the exit and SIGINT handlers and sets up the prompt string with the right username. Moreover, it handles the eventual redirection of the error output stream. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{myshell_8c_ad756d3bec579838f7595141ea44d5689}{prepare\+\_\+history}} (const int command\+\_\+counter, const char $\ast$storage\+\_\+path, const char $\ast$last\+\_\+command, char $\ast$args\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function prepares the array of arguments for the history command. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{myshell_8c_a6ee6f1fb2cd8c63686b5a2751f798c30}{run\+\_\+command}} (char $\ast$args\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function forks the current process and executes the command requested by the user in the child process. Sets the parent process on wait for the child process. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{myshell_8c_ac5c06438f6ef863e1aa06cca7d1c583d}{cd}} (char $\ast$args\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function changes the current directory to the one passed in args. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{myshell_8c_ae586e9d2704af208b1aab12558672bb3}{print\+\_\+error}} (const char str\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function prints an error message on stderr, with format\+: \char`\"{}\+Error while $\ast$your string$\ast$                  \mbox{[}code $\ast$errno$\ast$, $\ast$strerror(errno)$\ast$\mbox{]}\char`\"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}} = NULL
+\item 
+char $\ast$ \mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}} = NULL
+\item 
+char $\ast$ \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\+\_\+path}} = NULL
+\item 
+char $\ast$ \mbox{\hyperlink{myshell_8c_a9cc709875e24344ad0a7fb9584114ffd}{err\+\_\+file\+\_\+path}} = NULL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{myshell_8c_ae711e07378a40de753b6275a837c9200}\label{myshell_8c_ae711e07378a40de753b6275a837c9200}} 
+\index{myshell.c@{myshell.c}!default\_name@{default\_name}}
+\index{default\_name@{default\_name}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{default\_name}{default\_name}}
+{\footnotesize\ttfamily \#define default\+\_\+name~\char`\"{}guest\char`\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00011}{11}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_abe2fedc3a963bcd397037e60e16adabb}\label{myshell_8c_abe2fedc3a963bcd397037e60e16adabb}} 
+\index{myshell.c@{myshell.c}!filename@{filename}}
+\index{filename@{filename}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{filename}{filename}}
+{\footnotesize\ttfamily \#define filename~\char`\"{}/mainv2\char`\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00013}{13}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a844f4739306016d5b999690b18f25a45}\label{myshell_8c_a844f4739306016d5b999690b18f25a45}} 
+\index{myshell.c@{myshell.c}!H\_READ@{H\_READ}}
+\index{H\_READ@{H\_READ}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{H\_READ}{H\_READ}}
+{\footnotesize\ttfamily \#define H\+\_\+\+READ~-\/1}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00016}{16}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a2e7620041ccf5bc13755c9f28524d22e}\label{myshell_8c_a2e7620041ccf5bc13755c9f28524d22e}} 
+\index{myshell.c@{myshell.c}!MAX\_ARG@{MAX\_ARG}}
+\index{MAX\_ARG@{MAX\_ARG}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_ARG}{MAX\_ARG}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+ARG~20}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00015}{15}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}\label{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}} 
+\index{myshell.c@{myshell.c}!MAX\_BUFF@{MAX\_BUFF}}
+\index{MAX\_BUFF@{MAX\_BUFF}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_BUFF}{MAX\_BUFF}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+BUFF~256}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00014}{14}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_accdbea14ea06c15e271784368bd993e8}\label{myshell_8c_accdbea14ea06c15e271784368bd993e8}} 
+\index{myshell.c@{myshell.c}!PROMPT@{PROMPT}}
+\index{PROMPT@{PROMPT}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{PROMPT}{PROMPT}}
+{\footnotesize\ttfamily \#define PROMPT~\char`\"{}@myshell\# \char`\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00012}{12}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}\label{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}} 
+\index{myshell.c@{myshell.c}!cd@{cd}}
+\index{cd@{cd}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{cd()}{cd()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int cd (\begin{DoxyParamCaption}\item[{char $\ast$$\ast$}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myshell_8c_ac5c06438f6ef863e1aa06cca7d1c583d}\label{myshell_8c_ac5c06438f6ef863e1aa06cca7d1c583d}} 
+\index{myshell.c@{myshell.c}!cd@{cd}}
+\index{cd@{cd}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{cd()}{cd()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int cd (\begin{DoxyParamCaption}\item[{char $\ast$}]{args\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function changes the current directory to the one passed in args. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em args\mbox{[}1\mbox{]}} & If present, contains the new path. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 on success, 1 on error. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00443}{443}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_aaded456e943f85d7cd5522dd427a4796}\label{myshell_8c_aaded456e943f85d7cd5522dd427a4796}} 
+\index{myshell.c@{myshell.c}!clear\_args@{clear\_args}}
+\index{clear\_args@{clear\_args}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{clear\_args()}{clear\_args()}}
+{\footnotesize\ttfamily void clear\+\_\+args (\begin{DoxyParamCaption}\item[{char $\ast$$\ast$}]{args }\end{DoxyParamCaption})}
+
+
+
+This function clears the dynamic array of strings, made to hold the arguments. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em args} & pointer to the array of strings that has to be cleared. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00473}{473}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}\label{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}} 
+\index{myshell.c@{myshell.c}!exit\_command@{exit\_command}}
+\index{exit\_command@{exit\_command}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{exit\_command()}{exit\_command()}}
+{\footnotesize\ttfamily void exit\+\_\+command (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This functions handles the exit command (greets the user). 
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00510}{510}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_afe461d27b9c48d5921c00d521181f12f}\label{myshell_8c_afe461d27b9c48d5921c00d521181f12f}} 
+\index{myshell.c@{myshell.c}!loop@{loop}}
+\index{loop@{loop}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily void loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This function repeats, until termination of the process, the tasks of the shell\+: reads the command, executes it and shows again the prompr, ready for the next command, eventually displaying an error message. 
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00138}{138}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{myshell.c@{myshell.c}!main@{main}}
+\index{main@{main}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main function\+: after setting up the new PATH, it calls the \mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{setup()}} and \mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{loop()}} functions. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em argc} & Number of arguments passed by the user through the main shell (2 maximum) \\
+\hline
+\mbox{\texttt{ in}}  & {\em argv} & Array of arguments. argv\mbox{[}0\mbox{]} contains the path to this file as passed by the user; argv\mbox{[}1\mbox{]} (optional) contains the username set by the user (\char`\"{}guest\char`\"{} as default). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 in case of success, a non-\/zero integer oterwise. ~\newline
+ 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00047}{47}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}\label{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}} 
+\index{myshell.c@{myshell.c}!parse\_command@{parse\_command}}
+\index{parse\_command@{parse\_command}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{parse\_command()}{parse\_command()}}
+{\footnotesize\ttfamily int parse\+\_\+command (\begin{DoxyParamCaption}\item[{char $\ast$}]{string,  }\item[{char $\ast$$\ast$}]{args\+\_\+vect }\end{DoxyParamCaption})}
+
+
+
+This function parses the string read on stdin and collects the name of the command and the arguments that the user wants to execute. In addition, it prepares the arguments\textquotesingle{} array, which will be sent to the child process. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em string} & pointer to the command string read on stdin \\
+\hline
+\mbox{\texttt{ in}}  & {\em args} & pointer to the array of strings, which will be sent to the child process. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 on success, EOF on error. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00280}{280}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_ad756d3bec579838f7595141ea44d5689}\label{myshell_8c_ad756d3bec579838f7595141ea44d5689}} 
+\index{myshell.c@{myshell.c}!prepare\_history@{prepare\_history}}
+\index{prepare\_history@{prepare\_history}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{prepare\_history()}{prepare\_history()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int prepare\+\_\+history (\begin{DoxyParamCaption}\item[{const int}]{command\+\_\+counter,  }\item[{const char $\ast$}]{storage\+\_\+path,  }\item[{const char $\ast$}]{last\+\_\+command,  }\item[{char $\ast$}]{args\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function prepares the array of arguments for the history command. 
+
+\begin{DoxyNote}{Note}
+args\mbox{[}1\mbox{]} \+:= command\+\_\+counter args\mbox{[}2\mbox{]} \+:= storage\+\_\+path args\mbox{[}3\mbox{]} \+:= last\+\_\+command If command\+\_\+counter is equal to -\/1, then the file \char`\"{}.\+history\char`\"{} will be opened on read, therefore there is no need of the string \char`\"{}last\+\_\+command\char`\"{} (args\mbox{[}3\mbox{]} is set to NULL). 
+
+It clears the arguments\textquotesingle{} array. 
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em command\+\_\+counter} & counter of the successfully executed commands. \\
+\hline
+\mbox{\texttt{ in}}  & {\em storage\+\_\+path} & absolute path to the storage folder, where the file \char`\"{}.\+history\char`\"{} is located. \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+command} & a string containing the name of the last successfully executed command. \\
+\hline
+\mbox{\texttt{ in}}  & {\em args} & pointer to the array of arguments. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 on success, EOF on error. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00337}{337}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}\label{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}} 
+\index{myshell.c@{myshell.c}!prepare\_history@{prepare\_history}}
+\index{prepare\_history@{prepare\_history}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{prepare\_history()}{prepare\_history()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int prepare\+\_\+history (\begin{DoxyParamCaption}\item[{const int}]{,  }\item[{const char $\ast$}]{,  }\item[{const char $\ast$}]{,  }\item[{char $\ast$$\ast$}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}\label{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}} 
+\index{myshell.c@{myshell.c}!print\_error@{print\_error}}
+\index{print\_error@{print\_error}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{print\_error()}{print\_error()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void print\+\_\+error (\begin{DoxyParamCaption}\item[{const char $\ast$}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myshell_8c_ae586e9d2704af208b1aab12558672bb3}\label{myshell_8c_ae586e9d2704af208b1aab12558672bb3}} 
+\index{myshell.c@{myshell.c}!print\_error@{print\_error}}
+\index{print\_error@{print\_error}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{print\_error()}{print\_error()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void print\+\_\+error (\begin{DoxyParamCaption}\item[{const char}]{str\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function prints an error message on stderr, with format\+: \char`\"{}\+Error while $\ast$your string$\ast$                  \mbox{[}code $\ast$errno$\ast$, $\ast$strerror(errno)$\ast$\mbox{]}\char`\"{}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em str} & Your costant string, which will be pasted inside the error message. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00488}{488}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}\label{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}} 
+\index{myshell.c@{myshell.c}!read\_command@{read\_command}}
+\index{read\_command@{read\_command}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{read\_command()}{read\_command()}}
+{\footnotesize\ttfamily char $\ast$ read\+\_\+command (\begin{DoxyParamCaption}\item[{char $\ast$}]{stdin\+\_\+buff }\end{DoxyParamCaption})}
+
+
+
+This function reads one line from stdin and stores it in a string. 
+
+\begin{DoxyNote}{Note}
+The pointer to the string sent by the user will be modified. 
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em stdin\+\_\+buff} & pointer to the location in memory, where the read string will be written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the pointer to the read string, NULL on error. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00243}{243}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}\label{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}} 
+\index{myshell.c@{myshell.c}!run\_command@{run\_command}}
+\index{run\_command@{run\_command}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{run\_command()}{run\_command()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int run\+\_\+command (\begin{DoxyParamCaption}\item[{char $\ast$$\ast$}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myshell_8c_a6ee6f1fb2cd8c63686b5a2751f798c30}\label{myshell_8c_a6ee6f1fb2cd8c63686b5a2751f798c30}} 
+\index{myshell.c@{myshell.c}!run\_command@{run\_command}}
+\index{run\_command@{run\_command}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{run\_command()}{run\_command()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int run\+\_\+command (\begin{DoxyParamCaption}\item[{char $\ast$}]{args\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function forks the current process and executes the command requested by the user in the child process. Sets the parent process on wait for the child process. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em args} & arguments\textquotesingle{} array for the called command. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 if the child process executes and terminates correctly, a non-\/zero integer otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00407}{407}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a2b23bc0fe65aa619800183c7b031be9e}\label{myshell_8c_a2b23bc0fe65aa619800183c7b031be9e}} 
+\index{myshell.c@{myshell.c}!setup@{setup}}
+\index{setup@{setup}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void setup (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function checks if the right number of arguments was passed by the user, tries to register the exit and SIGINT handlers and sets up the prompt string with the right username. Moreover, it handles the eventual redirection of the error output stream. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em argc} & number of arguments passed to \mbox{\hyperlink{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}{main()}} \\
+\hline
+\mbox{\texttt{ in}}  & {\em argv} & array of arguments passed to \mbox{\hyperlink{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}{main()}} \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00094}{94}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}\label{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}} 
+\index{myshell.c@{myshell.c}!setup@{setup}}
+\index{setup@{setup}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void setup (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{char $\ast$$\ast$}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myshell_8c_a4b515337891f74ebd79cb307db16bf33}\label{myshell_8c_a4b515337891f74ebd79cb307db16bf33}} 
+\index{myshell.c@{myshell.c}!sigint\_handler@{sigint\_handler}}
+\index{sigint\_handler@{sigint\_handler}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{sigint\_handler()}{sigint\_handler()}}
+{\footnotesize\ttfamily void sigint\+\_\+handler (\begin{DoxyParamCaption}\item[{int}]{signo }\end{DoxyParamCaption})}
+
+
+
+This functions handles the CTRL+C interrupt (SIGINT). 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em signo} & ID numbe for SIGINT. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00498}{498}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}\label{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}} 
+\index{myshell.c@{myshell.c}!update\_path@{update\_path}}
+\index{update\_path@{update\_path}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{update\_path()}{update\_path()}}
+{\footnotesize\ttfamily void update\+\_\+path (\begin{DoxyParamCaption}\item[{char $\ast$}]{argv0 }\end{DoxyParamCaption})}
+
+
+
+This function updates the local variable PATH of the process to the absolute path of the bin folder, where all the executable files can be found. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em argv0} & Corrsponds to the argv\mbox{[}0\mbox{]} string sent to the main; therefore, it contains the program path sent by the user as argument (It can be relative or absolute compared to the actual location of the main shell when myshell is launched). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00068}{68}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}\label{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}} 
+\index{myshell.c@{myshell.c}!bin\_path@{bin\_path}}
+\index{bin\_path@{bin\_path}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{bin\_path}{bin\_path}}
+{\footnotesize\ttfamily char$\ast$ bin\+\_\+path = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00035}{35}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a9cc709875e24344ad0a7fb9584114ffd}\label{myshell_8c_a9cc709875e24344ad0a7fb9584114ffd}} 
+\index{myshell.c@{myshell.c}!err\_file\_path@{err\_file\_path}}
+\index{err\_file\_path@{err\_file\_path}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{err\_file\_path}{err\_file\_path}}
+{\footnotesize\ttfamily char$\ast$ err\+\_\+file\+\_\+path = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00036}{36}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a881961d263cfa8c42ca67419559b3c00}\label{myshell_8c_a881961d263cfa8c42ca67419559b3c00}} 
+\index{myshell.c@{myshell.c}!prompt@{prompt}}
+\index{prompt@{prompt}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{prompt}{prompt}}
+{\footnotesize\ttfamily char$\ast$ prompt = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00034}{34}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+
+\mbox{\Hypertarget{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}\label{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}} 
+\index{myshell.c@{myshell.c}!username@{username}}
+\index{username@{username}!myshell.c@{myshell.c}}
+\doxysubsubsection{\texorpdfstring{username}{username}}
+{\footnotesize\ttfamily char$\ast$ username = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{myshell_8c_source_l00033}{33}} of file \mbox{\hyperlink{myshell_8c_source}{myshell.\+c}}.
+

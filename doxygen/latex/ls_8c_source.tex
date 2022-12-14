@@ -1,0 +1,299 @@
+\hypertarget{ls_8c_source}{}\doxysection{ls.\+c}
+\label{ls_8c_source}\index{src/ls.c@{src/ls.c}}
+\mbox{\hyperlink{ls_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00001}00001 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00002}00002 \textcolor{preprocessor}{\#include <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00003}00003 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00004}00004 \textcolor{preprocessor}{\#include <dirent.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00005}00005 \textcolor{preprocessor}{\#include <errno.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00006}00006 \textcolor{preprocessor}{\#include <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00007}00007 \textcolor{preprocessor}{\#include <sys/stat.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00008}00008 \textcolor{preprocessor}{\#include <pwd.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00009}00009 \textcolor{preprocessor}{\#include <grp.h>}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00011}\mbox{\hyperlink{ls_8c_a4b70916bdf28ed7afd94e4fb98230a90}{00011}} \textcolor{preprocessor}{\#define MAX\_BUFF 256}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00012}\mbox{\hyperlink{ls_8c_af0c578eddb61211eb823c0079fe0b943}{00012}} \textcolor{preprocessor}{\#define FILES 0}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00013}\mbox{\hyperlink{ls_8c_ad05090e5ab2f6154c5ab0cc370e5b9cd}{00013}} \textcolor{preprocessor}{\#define DIRS 1}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00014}\mbox{\hyperlink{ls_8c_a1edd1ea8bddaf4d9c5eb3eae1ee1726a}{00014}} \textcolor{preprocessor}{\#define ALL 2}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00015}00015 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00016}\mbox{\hyperlink{structfile}{00016}} \textcolor{keyword}{struct }\mbox{\hyperlink{structfile}{file}} \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00017}\mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{00017}}     \textcolor{keywordtype}{char}* \mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{name}};     }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00018}\mbox{\hyperlink{structfile_a40138fde93db1c61dc9cd5f4a5d4743e}{00018}}     \textcolor{keyword}{struct }\mbox{\hyperlink{structfile}{file}}* \mbox{\hyperlink{structfile_a40138fde93db1c61dc9cd5f4a5d4743e}{pun}};   }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00019}\mbox{\hyperlink{structfile_a15cb773f98b1b1979961536d1913ab66}{00019}}     \textcolor{keyword}{struct }stat \mbox{\hyperlink{structfile_a15cb773f98b1b1979961536d1913ab66}{sb}}; }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00020}00020 \};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00021}00021 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00022}\mbox{\hyperlink{structoption}{00022}} \textcolor{keyword}{struct }\mbox{\hyperlink{structoption}{option}} \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00023}\mbox{\hyperlink{structoption_afe2c696e9dfde6cd3aad1cf389856881}{00023}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{structoption_afe2c696e9dfde6cd3aad1cf389856881}{l\_info}};     }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00024}\mbox{\hyperlink{structoption_a5c51a7dc4a4440d578d78f124ccd6f09}{00024}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{structoption_a5c51a7dc4a4440d578d78f124ccd6f09}{a\_hidden}};   }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00025}\mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{00025}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{desired}};    }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00026}\mbox{\hyperlink{structoption_ab1fc8692b3328e96fbe014ca3cee9085}{00026}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{structoption_ab1fc8692b3328e96fbe014ca3cee9085}{help}};       }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00027}00027 \};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00028}00028 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00029}\mbox{\hyperlink{ls_8c_a7e04b9cb82ddcfa3678beb3f8672b99d}{00029}} \textcolor{keywordtype}{char}* \mbox{\hyperlink{ls_8c_a7e04b9cb82ddcfa3678beb3f8672b99d}{ddir}} = NULL; \textcolor{comment}{/* desired directory */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00030}00030 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00031}00031 \textcolor{comment}{//void prepare\_command(int, char**);}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00032}00032 \textcolor{keywordtype}{void} \mbox{\hyperlink{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}{add\_to\_list}}(\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}**, \textcolor{keyword}{const} \textcolor{keyword}{struct} stat*, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00033}00033 \textcolor{keywordtype}{void} \mbox{\hyperlink{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}{free\_list}}(\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}**);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00034}\mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{00034}} \textcolor{keywordtype}{void} \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}} (\textcolor{keyword}{const} \textcolor{keywordtype}{char}*);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00035}00035 \textcolor{keywordtype}{void} \mbox{\hyperlink{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}{print\_list}}(\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}*, \textcolor{keyword}{const} \textcolor{keywordtype}{char}*, \textcolor{keyword}{struct} \mbox{\hyperlink{structoption}{option}}*);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00036}00036 \textcolor{keywordtype}{void} \mbox{\hyperlink{ls_8c_a853216ac51aa181669ff4d3de74058a7}{print\_help}}();}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00037}00037 \textcolor{keyword}{struct }\mbox{\hyperlink{structoption}{option}} \mbox{\hyperlink{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}{options}}(int, char**);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00039}\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{00039}} FILE* \mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = NULL;    \textcolor{comment}{/* Error output stream */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00040}00040 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00048}00048 \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00049}\mbox{\hyperlink{ls_8c_a0ddf1224851353fc92bfbff6f499fa97}{00049}} \mbox{\hyperlink{ls_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}* argv[]) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00050}00050     }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00051}00051     \mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = stderr;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00053}00053     \textcolor{comment}{/* Cheks the number of arguments passed */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00054}00054     \textcolor{keywordflow}{if} (argc > 9) \{   \textcolor{comment}{/* Maximum number of arguments, considering the path and all the 5 options selected */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00055}00055         fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Unexpected arguments!\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00056}00056         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00057}00057     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00058}00058 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00059}00059     \textcolor{comment}{/* Redirects the error output stream to the specified file in the arguments (if present) */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00060}00060     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < argc; i++) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00061}00061         \textcolor{keywordflow}{if} (strcmp(argv[i], \textcolor{stringliteral}{"{}2>"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00062}00062             \textcolor{keywordflow}{if} (argv[i + 1] != NULL) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00063}00063                 \textcolor{keywordflow}{if} ((\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = fopen(argv[i + 1], \textcolor{stringliteral}{"{}a"{}})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00064}00064                     fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}},\textcolor{stringliteral}{"{}Error while opening the error output stream\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00065}00065                     exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00066}00066                 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00067}00067                 \textcolor{comment}{/* Set the error stream to unbeffered */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00068}00068                 \textcolor{keywordflow}{if} (setvbuf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, NULL, \_IONBF, 0) != 0) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00069}00069                     fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while setting the error stream as unbuffered: \%s"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00070}00070                     exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00071}00071                 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00072}00072             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00073}00073                 fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Wrong arguments! Did you mean \(\backslash\)"{}2> error\_output\_file\(\backslash\)"{}?\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00074}00074                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00075}00075             \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00076}00076         \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00077}00077     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00079}00079     \textcolor{comment}{/* Gets options */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00080}00080     \textcolor{keyword}{struct }\mbox{\hyperlink{structoption}{option}} opt = \mbox{\hyperlink{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}{options}}(argc, argv);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00082}00082     \textcolor{comment}{/* Prints the help section and terminates the process */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00083}00083     \textcolor{keywordflow}{if} (opt.\mbox{\hyperlink{structoption_ab1fc8692b3328e96fbe014ca3cee9085}{help}}) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00084}00084         \mbox{\hyperlink{ls_8c_a853216ac51aa181669ff4d3de74058a7}{print\_help}}();}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00085}00085         \textcolor{keywordflow}{return} EXIT\_SUCCESS;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00086}00086     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00087}00087 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00088}00088     \textcolor{comment}{/* Updates number of argumetns (excluding redirection arguments) */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00089}00089     \textcolor{keywordflow}{if} (\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} != stderr) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00090}00090         argc = argc -\/ 2;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00091}00091     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00092}00092 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00093}00093     \textcolor{comment}{/* Sets "{}path\_arg\_num"{} to the index of the argument containing the path on which the ls will be executed */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00094}00094     \textcolor{keywordtype}{int} path\_arg\_num = 1;   \textcolor{comment}{/* Index of the path argument. Starts from 1 (excludes the program name) */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00095}00095 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00096}00096     \textcolor{comment}{/* Scans the arguments, until it either reaches the end or it finds a "{}non-\/option"{} argument */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00097}00097     \textcolor{keywordflow}{while} ((path\_arg\_num < argc) \&\& (strchr(argv[path\_arg\_num], \textcolor{charliteral}{'-\/'}) != NULL)) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00098}00098         path\_arg\_num++;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00099}00099     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00100}00100 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00101}00101     \textcolor{comment}{/* Open the specified path (if present); otherwise it opens the current directory*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00102}00102     \textcolor{keywordflow}{if} ((path\_arg\_num < argc) \&\& (argv[path\_arg\_num] != NULL)) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00103}00103         \textcolor{keywordflow}{if} (chdir(argv[path\_arg\_num]) < 0) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00104}00104             fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}ls: cannot access '\%s': No such file or directory\(\backslash\)n"{}}, argv[path\_arg\_num]);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00105}00105             \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00106}00106         \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00107}00107     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00108}00108 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00109}00109     DIR* dp;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00110}00110     \textcolor{keywordtype}{int} fd;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00111}00111 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00112}00112     \textcolor{comment}{/* Open destination directory */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00113}00113     dp = opendir(getcwd(NULL, 0));}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00114}00114 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00115}00115     \textcolor{keywordflow}{if} (dp == NULL) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00116}00116         \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}opening directory"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00117}00117         \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00118}00118     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00119}00119 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00120}00120     \textcolor{keyword}{struct }\mbox{\hyperlink{structfile}{file}}* files = NULL;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00121}00121     \textcolor{keyword}{struct }\mbox{\hyperlink{structfile}{file}}* dirs = NULL;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00122}00122 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00123}00123     \textcolor{keyword}{struct }dirent* dirp;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00124}00124 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00125}00125     \textcolor{comment}{/* Scan each entry of the directory */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00126}00126     \textcolor{keywordflow}{while} ((dirp = readdir(dp)) != NULL) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00127}00127 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00128}00128         \textcolor{keyword}{struct }stat sb;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00129}00129         }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00130}00130         \textcolor{keywordflow}{if} (lstat(dirp-\/>d\_name, \&sb) < 0)\{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00131}00131             \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}opening i-\/node"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00132}00132             \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00133}00133         \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00134}00134 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00135}00135         \textcolor{comment}{/* Sort files and directories in the right list */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00136}00136         \textcolor{keywordflow}{if} (S\_ISDIR(sb.st\_mode) > 0) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00137}00137             \mbox{\hyperlink{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}{add\_to\_list}} (\&dirs, \&sb, dirp-\/>d\_name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00138}00138         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00139}00139             \mbox{\hyperlink{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}{add\_to\_list}} (\&files, \&sb, dirp-\/>d\_name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00140}00140         \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00141}00141     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00142}00142     closedir(dp);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00143}00143 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00144}00144     \textcolor{comment}{/*print the lists*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00145}00145     \textcolor{keywordflow}{if} (opt.\mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{desired}} != \mbox{\hyperlink{ls_8c_af0c578eddb61211eb823c0079fe0b943}{FILES}})}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00146}00146         \mbox{\hyperlink{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}{print\_list}}(dirs, \textcolor{stringliteral}{"{}-\/-\/> Directories:"{}}, \&opt);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00147}00147     \textcolor{keywordflow}{if} (opt.\mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{desired}} != \mbox{\hyperlink{ls_8c_ad05090e5ab2f6154c5ab0cc370e5b9cd}{DIRS}})}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00148}00148         \mbox{\hyperlink{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}{print\_list}}(files, \textcolor{stringliteral}{"{}-\/-\/> Files:"{}}, \&opt);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00149}00149 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00150}00150     \textcolor{comment}{/*free heap*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00151}00151     \mbox{\hyperlink{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}{free\_list}}(\&files);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00152}00152     \mbox{\hyperlink{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}{free\_list}}(\&dirs);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00153}00153 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00154}00154     \textcolor{keywordflow}{return} EXIT\_SUCCESS;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00155}00155 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00156}00156 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00161}00161 \textcolor{keyword}{struct }\mbox{\hyperlink{structoption}{option}}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00162}\mbox{\hyperlink{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}{00162}} \mbox{\hyperlink{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}{options}}(int argc, char** argv) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00163}00163     }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00164}00164     \textcolor{keyword}{struct }\mbox{\hyperlink{structoption}{option}} opt;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00165}00165     opt.\mbox{\hyperlink{structoption_a5c51a7dc4a4440d578d78f124ccd6f09}{a\_hidden}} = 0;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00166}00166     opt.\mbox{\hyperlink{structoption_afe2c696e9dfde6cd3aad1cf389856881}{l\_info}} = 0;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00167}00167     opt.\mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{desired}} = \mbox{\hyperlink{ls_8c_a1edd1ea8bddaf4d9c5eb3eae1ee1726a}{ALL}};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00168}00168     opt.\mbox{\hyperlink{structoption_ab1fc8692b3328e96fbe014ca3cee9085}{help}} = 0;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00169}00169 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00170}00170     \textcolor{comment}{/* Parses the arguments array to find the set options. It automatically discards the */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00171}00171     \textcolor{comment}{/* arguments not written with the format "{}-\/"{} + option */}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00172}00172     \textcolor{keywordtype}{char} ch;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00173}00173     \textcolor{keywordflow}{while} ((ch = getopt (argc, argv, \textcolor{stringliteral}{"{}ladfh"{}})) != -\/1) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00174}00174 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00175}00175         \textcolor{keywordflow}{switch} (ch) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00176}00176             \textcolor{keywordflow}{case} \textcolor{charliteral}{'l'}:}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00177}00177                 opt.\mbox{\hyperlink{structoption_afe2c696e9dfde6cd3aad1cf389856881}{l\_info}} = 1;     \textcolor{comment}{/*include info*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00178}00178                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00179}00179             \textcolor{keywordflow}{case} \textcolor{charliteral}{'a'}:}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00180}00180                 opt.\mbox{\hyperlink{structoption_a5c51a7dc4a4440d578d78f124ccd6f09}{a\_hidden}} = 1;   \textcolor{comment}{/*show hidden files*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00181}00181                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00182}00182             \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00183}00183                 opt.\mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{desired}} = \mbox{\hyperlink{ls_8c_ad05090e5ab2f6154c5ab0cc370e5b9cd}{DIRS}}; \textcolor{comment}{/*show directories only*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00184}00184                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00185}00185             \textcolor{keywordflow}{case} \textcolor{charliteral}{'f'}:}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00186}00186                 opt.\mbox{\hyperlink{structoption_a3450f7500f843178b4517d0e7ef2b537}{desired}} = \mbox{\hyperlink{ls_8c_af0c578eddb61211eb823c0079fe0b943}{FILES}}; \textcolor{comment}{/*show files only*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00187}00187                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00188}00188             \textcolor{keywordflow}{case} \textcolor{charliteral}{'h'}:}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00189}00189                 opt.\mbox{\hyperlink{structoption_ab1fc8692b3328e96fbe014ca3cee9085}{help}} = 1; \textcolor{comment}{/*help*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00190}00190                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00191}00191             \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00192}00192                 fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Try 'ls -\/h' for more information\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00193}00193                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00194}00194         \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00195}00195     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00196}00196 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00197}00197     \textcolor{keywordflow}{return} opt;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00198}00198 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00199}00199 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00206}00206 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00207}\mbox{\hyperlink{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}{00207}} \mbox{\hyperlink{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}{add\_to\_list}} (\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}** last, \textcolor{keyword}{const} \textcolor{keyword}{struct} stat* sb, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* name) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00208}00208 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00209}00209     \textcolor{keyword}{struct }\mbox{\hyperlink{structfile}{file}}* new\_elem = malloc (\textcolor{keyword}{sizeof} (\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}));}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00210}00210 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00211}00211     \textcolor{keywordflow}{if} (new\_elem == NULL) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00212}00212         \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}} (\textcolor{stringliteral}{"{}allocating"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00213}00213         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00214}00214     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00215}00215 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00216}00216     new\_elem-\/>\mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{name}} = calloc (strlen (\mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{name}}) + 1, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}));}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00217}00217     \textcolor{keywordflow}{if} (new\_elem-\/>\mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{name}} == NULL) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00218}00218         \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}} (\textcolor{stringliteral}{"{}allocating"{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00219}00219         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00220}00220     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00221}00221     strcpy (new\_elem-\/>\mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{name}}, \mbox{\hyperlink{structfile_a5ac083a645d964373f022d03df4849c8}{name}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00222}00222 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00223}00223     \textcolor{comment}{/*adding the new element at the beggining of the list*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00224}00224     new\_elem-\/>\mbox{\hyperlink{structfile_a15cb773f98b1b1979961536d1913ab66}{sb}} = *\mbox{\hyperlink{structfile_a15cb773f98b1b1979961536d1913ab66}{sb}};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00225}00225     new\_elem-\/>\mbox{\hyperlink{structfile_a40138fde93db1c61dc9cd5f4a5d4743e}{pun}} = *last;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00226}00226     *last = new\_elem;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00227}00227 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00228}00228     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00229}00229 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00230}00230 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00237}00237 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00238}\mbox{\hyperlink{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}{00238}} \mbox{\hyperlink{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}{print\_list}} (\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}* list, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* title, \textcolor{keyword}{struct} \mbox{\hyperlink{structoption}{option}}* opt) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00239}00239 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00240}00240     printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, title);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00241}00241 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00242}00242     \textcolor{keywordflow}{for} (\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}* pivot = list; pivot != NULL; pivot = pivot-\/>\mbox{\hyperlink{structfile_a40138fde93db1c61dc9cd5f4a5d4743e}{pun}}) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00243}00243 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00244}00244         \textcolor{keywordflow}{if} (!(opt-\/>\mbox{\hyperlink{structoption_a5c51a7dc4a4440d578d78f124ccd6f09}{a\_hidden}}) \&\& *(pivot-\/>name) == \textcolor{charliteral}{'.'}) \textcolor{comment}{/*continue if it is an hidden file*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00245}00245             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00246}00246         \textcolor{keywordflow}{if} (opt-\/>\mbox{\hyperlink{structoption_afe2c696e9dfde6cd3aad1cf389856881}{l\_info}}) \{ \textcolor{comment}{/*show options*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00247}00247 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00248}00248             fprintf(stdout, \textcolor{stringliteral}{"{}-\/ "{}});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00249}00249 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00250}00250             fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, !S\_ISREG(pivot-\/>sb.st\_mode) ? \textcolor{charliteral}{'s'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00251}00251 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00252}00252             \textcolor{comment}{/*permissions*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00253}00253             fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IRUSR) ? \textcolor{charliteral}{'r'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00254}00254                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IWUSR) ? \textcolor{charliteral}{'w'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00255}00255                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IXUSR) ? \textcolor{charliteral}{'x'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00256}00256                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IRGRP) ? \textcolor{charliteral}{'r'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00257}00257                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IWGRP) ? \textcolor{charliteral}{'w'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00258}00258                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IXGRP) ? \textcolor{charliteral}{'x'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00259}00259                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IROTH) ? \textcolor{charliteral}{'r'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00260}00260                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IWOTH) ? \textcolor{charliteral}{'w'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00261}00261                         fprintf(stdout, \textcolor{stringliteral}{"{}\%c"{}}, (pivot-\/>sb.st\_mode \& S\_IXOTH) ? \textcolor{charliteral}{'x'} : \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00262}00262 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00263}00263             \textcolor{comment}{/*hard links*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00264}00264             fprintf(stdout, \textcolor{stringliteral}{"{}\(\backslash\)t\%d"{}}, pivot-\/>sb.st\_nlink);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00265}00265 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00266}00266             \textcolor{comment}{/*owners*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00267}00267             \textcolor{keyword}{struct }passwd *pw = getpwuid(pivot-\/>sb.st\_uid);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00268}00268             \textcolor{keyword}{struct }group *gr = getgrgid(pivot-\/>sb.st\_gid);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00269}00269             fprintf(stdout, \textcolor{stringliteral}{"{}\(\backslash\)t\%s\(\backslash\)t\%s"{}}, pw-\/>pw\_name, gr-\/>gr\_name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00270}00270 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00271}00271             \textcolor{comment}{/*size*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00272}00272             fprintf(stdout, \textcolor{stringliteral}{"{}\(\backslash\)t\%d"{}}, pivot-\/>sb.st\_size);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00273}00273 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00274}00274             \textcolor{comment}{/*name*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00275}00275             fprintf(stdout, \textcolor{stringliteral}{"{}\(\backslash\)t\%s\(\backslash\)n"{}}, pivot-\/>name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00276}00276 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00277}00277         \} \textcolor{keywordflow}{else} \textcolor{comment}{/*show only the file name*/}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00278}00278             printf(\textcolor{stringliteral}{"{}\(\backslash\)t-\/ \%s\(\backslash\)n"{}}, pivot-\/>name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00279}00279     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00280}00280     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00281}00281 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00282}00282 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00287}00287 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00288}\mbox{\hyperlink{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}{00288}} \mbox{\hyperlink{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}{free\_list}} (\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}** files) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00289}00289 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00290}00290     \textcolor{keywordflow}{if} (*files == NULL)}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00291}00291         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00292}00292 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00293}00293     \textcolor{keywordflow}{for} (\textcolor{keyword}{struct} \mbox{\hyperlink{structfile}{file}}* pivot = *files; *files != NULL; *files = pivot) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00294}00294         pivot = (*files)-\/>pun;}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00295}00295         free((*files)-\/>name);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00296}00296         free(*files);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00297}00297     \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00298}00298 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00299}00299     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00300}00300 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00301}00301 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00305}00305 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00306}\mbox{\hyperlink{ls_8c_a853216ac51aa181669ff4d3de74058a7}{00306}} \mbox{\hyperlink{ls_8c_a853216ac51aa181669ff4d3de74058a7}{print\_help}}() \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00307}00307     \textcolor{keyword}{const} \textcolor{keywordtype}{char} help[] =}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00308}00308         \textcolor{stringliteral}{"{}\(\backslash\)tList information about the FILEs (the current directory by default).\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00309}00309 \textcolor{stringliteral}{        \(\backslash\)t-\/a\(\backslash\)tShow hidden files.\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00310}00310 \textcolor{stringliteral}{        \(\backslash\)t-\/l\(\backslash\)tShow info.\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00311}00311 \textcolor{stringliteral}{        \(\backslash\)t-\/h\(\backslash\)tPrint help page.\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00312}00312 \textcolor{stringliteral}{        \(\backslash\)t-\/f\(\backslash\)tShow files only.\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00313}00313 \textcolor{stringliteral}{        \(\backslash\)t-\/d\(\backslash\)tShow directories only.\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00314}00314 \textcolor{stringliteral}{        \(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00315}00315 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00316}00316     fprintf(stdout, \textcolor{stringliteral}{"{}\%s"{}}, help);}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00317}00317 \}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00318}00318 }
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00324}00324 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00325}\mbox{\hyperlink{ls_8c_ae586e9d2704af208b1aab12558672bb3}{00325}} \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}} (\textcolor{keyword}{const} \textcolor{keywordtype}{char} str[]) \{}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00326}00326     fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while \%s [code \%d, \%s] \(\backslash\)n"{}}, str, errno, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00327}00327     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ls_8c_source_l00328}00328 \}}
+
+\end{DoxyCode}

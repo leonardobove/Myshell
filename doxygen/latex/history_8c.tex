@@ -1,0 +1,92 @@
+\hypertarget{history_8c}{}\doxysection{src/history.c File Reference}
+\label{history_8c}\index{src/history.c@{src/history.c}}
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{history_8c_ab117546549783a058d0321a287699579}{FILE\+\_\+\+NAME}}~\char`\"{}.history\char`\"{}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{history_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This program manages the history of the command successfully executed by the user. The history of myshell is kept inside a hidden filled \char`\"{}.\+history\char`\"{}, stored in the original folder where the process myshell is launched. Depending on the value of \char`\"{}command\+\_\+counter\char`\"{}, this program can write in append on the file \char`\"{}.\+history\char`\"{} (command\+\_\+counter \texorpdfstring{$>$}{>}= 0) or it can read from it and print its content on stdout (command\+\_\+counter = -\/1). It takes as inputs the total number of the executed commands, the name of the last command and the path for the storage of the file \char`\"{}.\+history\char`\"{}. ~\newline
+ \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+FILE $\ast$ \mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}} = NULL
+\item 
+const int \mbox{\hyperlink{history_8c_a92f537e0a0314150b3c0817f45153999}{MAX\+\_\+\+LINE}} = 1024
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{history_8c_ab117546549783a058d0321a287699579}\label{history_8c_ab117546549783a058d0321a287699579}} 
+\index{history.c@{history.c}!FILE\_NAME@{FILE\_NAME}}
+\index{FILE\_NAME@{FILE\_NAME}!history.c@{history.c}}
+\doxysubsubsection{\texorpdfstring{FILE\_NAME}{FILE\_NAME}}
+{\footnotesize\ttfamily \#define FILE\+\_\+\+NAME~\char`\"{}.history\char`\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{history_8c_source_l00007}{7}} of file \mbox{\hyperlink{history_8c_source}{history.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{history_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{history_8c_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{history.c@{history.c}!main@{main}}
+\index{main@{main}!history.c@{history.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This program manages the history of the command successfully executed by the user. The history of myshell is kept inside a hidden filled \char`\"{}.\+history\char`\"{}, stored in the original folder where the process myshell is launched. Depending on the value of \char`\"{}command\+\_\+counter\char`\"{}, this program can write in append on the file \char`\"{}.\+history\char`\"{} (command\+\_\+counter \texorpdfstring{$>$}{>}= 0) or it can read from it and print its content on stdout (command\+\_\+counter = -\/1). It takes as inputs the total number of the executed commands, the name of the last command and the path for the storage of the file \char`\"{}.\+history\char`\"{}. ~\newline
+ 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em argv\mbox{[}1\mbox{]}} & equivalent to the command counter. If set to -\/1, the file \char`\"{}.\+history\char`\"{} will be open on read. \\
+\hline
+\mbox{\texttt{ in}}  & {\em argv\mbox{[}2\mbox{]}} & contains the absolute storage path, where the file \char`\"{}.\+history\char`\"{} will be saved \\
+\hline
+\mbox{\texttt{ in}}  & {\em argv\mbox{[}3\mbox{]}} & if argv\mbox{[}1\mbox{]} \texorpdfstring{$>$}{>}= 0, it holds the name of the last successfully executed command. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 on success, a non-\/zero integer on error. ~\newline
+ 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{history_8c_source_l00026}{26}} of file \mbox{\hyperlink{history_8c_source}{history.\+c}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{history_8c_a359d238b0d498b0f28a8777169cc21a9}\label{history_8c_a359d238b0d498b0f28a8777169cc21a9}} 
+\index{history.c@{history.c}!history@{history}}
+\index{history@{history}!history.c@{history.c}}
+\doxysubsubsection{\texorpdfstring{history}{history}}
+{\footnotesize\ttfamily FILE$\ast$ history = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{history_8c_source_l00009}{9}} of file \mbox{\hyperlink{history_8c_source}{history.\+c}}.
+
+\mbox{\Hypertarget{history_8c_a92f537e0a0314150b3c0817f45153999}\label{history_8c_a92f537e0a0314150b3c0817f45153999}} 
+\index{history.c@{history.c}!MAX\_LINE@{MAX\_LINE}}
+\index{MAX\_LINE@{MAX\_LINE}!history.c@{history.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_LINE}{MAX\_LINE}}
+{\footnotesize\ttfamily const int MAX\+\_\+\+LINE = 1024}
+
+
+
+Definition at line \mbox{\hyperlink{history_8c_source_l00010}{10}} of file \mbox{\hyperlink{history_8c_source}{history.\+c}}.
+

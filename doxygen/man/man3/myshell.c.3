@@ -1,0 +1,408 @@
+.TH "src/myshell.c" 3 "Wed Dec 14 2022" "Version 1.0" "Myshell" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/myshell.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <signal\&.h>\fP
+.br
+\fC#include <limits\&.h>\fP
+.br
+\fC#include <sys/wait\&.h>\fP
+.br
+\fC#include <math\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBdefault_name\fP   'guest'"
+.br
+.ti -1c
+.RI "#define \fBPROMPT\fP   '@myshell# '"
+.br
+.ti -1c
+.RI "#define \fBfilename\fP   '/mainv2'"
+.br
+.ti -1c
+.RI "#define \fBMAX_BUFF\fP   256"
+.br
+.ti -1c
+.RI "#define \fBMAX_ARG\fP   20"
+.br
+.ti -1c
+.RI "#define \fBH_READ\fP   \-1"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBsigint_handler\fP (int signo)"
+.br
+.RI "This functions handles the CTRL+C interrupt (SIGINT)\&. "
+.ti -1c
+.RI "void \fBsetup\fP (int, char **)"
+.br
+.ti -1c
+.RI "void \fBloop\fP ()"
+.br
+.RI "This function repeats, until termination of the process, the tasks of the shell: reads the command, executes it and shows again the prompr, ready for the next command, eventually displaying an error message\&. "
+.ti -1c
+.RI "void \fBupdate_path\fP (char *argv0)"
+.br
+.RI "This function updates the local variable PATH of the process to the absolute path of the bin folder, where all the executable files can be found\&. "
+.ti -1c
+.RI "void \fBexit_command\fP (void)"
+.br
+.RI "This functions handles the exit command (greets the user)\&. "
+.ti -1c
+.RI "void \fBprint_error\fP (const char *)"
+.br
+.ti -1c
+.RI "void \fBclear_args\fP (char **args)"
+.br
+.RI "This function clears the dynamic array of strings, made to hold the arguments\&. "
+.ti -1c
+.RI "char * \fBread_command\fP (char *stdin_buff)"
+.br
+.RI "This function reads one line from stdin and stores it in a string\&. "
+.ti -1c
+.RI "int \fBparse_command\fP (char *string, char **args_vect)"
+.br
+.RI "This function parses the string read on stdin and collects the name of the command and the arguments that the user wants to execute\&. In addition, it prepares the arguments' array, which will be sent to the child process\&. "
+.ti -1c
+.RI "int \fBprepare_history\fP (const int, const char *, const char *, char **)"
+.br
+.ti -1c
+.RI "int \fBrun_command\fP (char **)"
+.br
+.ti -1c
+.RI "int \fBcd\fP (char **)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.RI "Main function: after setting up the new PATH, it calls the \fBsetup()\fP and \fBloop()\fP functions\&. "
+.ti -1c
+.RI "void \fBsetup\fP (int argc, char *argv[])"
+.br
+.RI "This function checks if the right number of arguments was passed by the user, tries to register the exit and SIGINT handlers and sets up the prompt string with the right username\&. Moreover, it handles the eventual redirection of the error output stream\&. "
+.ti -1c
+.RI "int \fBprepare_history\fP (const int command_counter, const char *storage_path, const char *last_command, char *args[])"
+.br
+.RI "This function prepares the array of arguments for the history command\&. "
+.ti -1c
+.RI "int \fBrun_command\fP (char *args[])"
+.br
+.RI "This function forks the current process and executes the command requested by the user in the child process\&. Sets the parent process on wait for the child process\&. "
+.ti -1c
+.RI "int \fBcd\fP (char *args[])"
+.br
+.RI "This function changes the current directory to the one passed in args\&. "
+.ti -1c
+.RI "void \fBprint_error\fP (const char str[])"
+.br
+.RI "This function prints an error message on stderr, with format: 'Error while *your string*
+                 [code *errno*, *strerror(errno)*]'\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "char * \fBusername\fP = NULL"
+.br
+.ti -1c
+.RI "char * \fBprompt\fP = NULL"
+.br
+.ti -1c
+.RI "char * \fBbin_path\fP = NULL"
+.br
+.ti -1c
+.RI "char * \fBerr_file_path\fP = NULL"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define default_name   'guest'"
+
+.PP
+Definition at line \fB11\fP of file \fBmyshell\&.c\fP\&.
+.SS "#define filename   '/mainv2'"
+
+.PP
+Definition at line \fB13\fP of file \fBmyshell\&.c\fP\&.
+.SS "#define H_READ   \-1"
+
+.PP
+Definition at line \fB16\fP of file \fBmyshell\&.c\fP\&.
+.SS "#define MAX_ARG   20"
+
+.PP
+Definition at line \fB15\fP of file \fBmyshell\&.c\fP\&.
+.SS "#define MAX_BUFF   256"
+
+.PP
+Definition at line \fB14\fP of file \fBmyshell\&.c\fP\&.
+.SS "#define PROMPT   '@myshell# '"
+
+.PP
+Definition at line \fB12\fP of file \fBmyshell\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int cd (char **)"
+
+.SS "int cd (char * args[])"
+
+.PP
+This function changes the current directory to the one passed in args\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargs[1]\fP If present, contains the new path\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success, 1 on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB443\fP of file \fBmyshell\&.c\fP\&.
+.SS "void clear_args (char ** args)"
+
+.PP
+This function clears the dynamic array of strings, made to hold the arguments\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargs\fP pointer to the array of strings that has to be cleared\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB473\fP of file \fBmyshell\&.c\fP\&.
+.SS "void exit_command (void)"
+
+.PP
+This functions handles the exit command (greets the user)\&. 
+.PP
+Definition at line \fB510\fP of file \fBmyshell\&.c\fP\&.
+.SS "void loop ()"
+
+.PP
+This function repeats, until termination of the process, the tasks of the shell: reads the command, executes it and shows again the prompr, ready for the next command, eventually displaying an error message\&. 
+.PP
+Definition at line \fB138\fP of file \fBmyshell\&.c\fP\&.
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Main function: after setting up the new PATH, it calls the \fBsetup()\fP and \fBloop()\fP functions\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargc\fP Number of arguments passed by the user through the main shell (2 maximum) 
+.br
+\fIargv\fP Array of arguments\&. argv[0] contains the path to this file as passed by the user; argv[1] (optional) contains the username set by the user ('guest' as default)\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 in case of success, a non-zero integer oterwise\&. 
+.br
+ 
+.RE
+.PP
+
+.PP
+Definition at line \fB47\fP of file \fBmyshell\&.c\fP\&.
+.SS "int parse_command (char * string, char ** args_vect)"
+
+.PP
+This function parses the string read on stdin and collects the name of the command and the arguments that the user wants to execute\&. In addition, it prepares the arguments' array, which will be sent to the child process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring\fP pointer to the command string read on stdin 
+.br
+\fIargs\fP pointer to the array of strings, which will be sent to the child process\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success, EOF on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB280\fP of file \fBmyshell\&.c\fP\&.
+.SS "int prepare_history (const int command_counter, const char * storage_path, const char * last_command, char * args[])"
+
+.PP
+This function prepares the array of arguments for the history command\&. 
+.PP
+\fBNote\fP
+.RS 4
+args[1] := command_counter args[2] := storage_path args[3] := last_command If command_counter is equal to -1, then the file '\&.history' will be opened on read, therefore there is no need of the string 'last_command' (args[3] is set to NULL)\&. 
+.PP
+It clears the arguments' array\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIcommand_counter\fP counter of the successfully executed commands\&. 
+.br
+\fIstorage_path\fP absolute path to the storage folder, where the file '\&.history' is located\&. 
+.br
+\fIlast_command\fP a string containing the name of the last successfully executed command\&. 
+.br
+\fIargs\fP pointer to the array of arguments\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success, EOF on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB337\fP of file \fBmyshell\&.c\fP\&.
+.SS "int prepare_history (const int, const char *, const char *, char **)"
+
+.SS "void print_error (const char *)"
+
+.SS "void print_error (const char str[])"
+
+.PP
+This function prints an error message on stderr, with format: 'Error while *your string*
+                 [code *errno*, *strerror(errno)*]'\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Your costant string, which will be pasted inside the error message\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB488\fP of file \fBmyshell\&.c\fP\&.
+.SS "char * read_command (char * stdin_buff)"
+
+.PP
+This function reads one line from stdin and stores it in a string\&. 
+.PP
+\fBNote\fP
+.RS 4
+The pointer to the string sent by the user will be modified\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstdin_buff\fP pointer to the location in memory, where the read string will be written\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns the pointer to the read string, NULL on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB243\fP of file \fBmyshell\&.c\fP\&.
+.SS "int run_command (char **)"
+
+.SS "int run_command (char * args[])"
+
+.PP
+This function forks the current process and executes the command requested by the user in the child process\&. Sets the parent process on wait for the child process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargs\fP arguments' array for the called command\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 if the child process executes and terminates correctly, a non-zero integer otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB407\fP of file \fBmyshell\&.c\fP\&.
+.SS "void setup (int argc, char * argv[])"
+
+.PP
+This function checks if the right number of arguments was passed by the user, tries to register the exit and SIGINT handlers and sets up the prompt string with the right username\&. Moreover, it handles the eventual redirection of the error output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargc\fP number of arguments passed to \fBmain()\fP 
+.br
+\fIargv\fP array of arguments passed to \fBmain()\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB94\fP of file \fBmyshell\&.c\fP\&.
+.SS "void setup (int, char **)"
+
+.SS "void sigint_handler (int signo)"
+
+.PP
+This functions handles the CTRL+C interrupt (SIGINT)\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsigno\fP ID numbe for SIGINT\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB498\fP of file \fBmyshell\&.c\fP\&.
+.SS "void update_path (char * argv0)"
+
+.PP
+This function updates the local variable PATH of the process to the absolute path of the bin folder, where all the executable files can be found\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargv0\fP Corrsponds to the argv[0] string sent to the main; therefore, it contains the program path sent by the user as argument (It can be relative or absolute compared to the actual location of the main shell when myshell is launched)\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB68\fP of file \fBmyshell\&.c\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char* bin_path = NULL"
+
+.PP
+Definition at line \fB35\fP of file \fBmyshell\&.c\fP\&.
+.SS "char* err_file_path = NULL"
+
+.PP
+Definition at line \fB36\fP of file \fBmyshell\&.c\fP\&.
+.SS "char* prompt = NULL"
+
+.PP
+Definition at line \fB34\fP of file \fBmyshell\&.c\fP\&.
+.SS "char* username = NULL"
+
+.PP
+Definition at line \fB33\fP of file \fBmyshell\&.c\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Myshell from the source code\&.

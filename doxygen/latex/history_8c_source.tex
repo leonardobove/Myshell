@@ -1,0 +1,123 @@
+\hypertarget{history_8c_source}{}\doxysection{history.\+c}
+\label{history_8c_source}\index{src/history.c@{src/history.c}}
+\mbox{\hyperlink{history_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00001}00001 \textcolor{preprocessor}{\#include <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00002}00002 \textcolor{preprocessor}{\#include <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00003}00003 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00004}00004 \textcolor{preprocessor}{\#include <errno.h>}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00005}00005 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00007}\mbox{\hyperlink{history_8c_ab117546549783a058d0321a287699579}{00007}} \textcolor{preprocessor}{\#define FILE\_NAME "{}.history"{}}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00009}\mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{00009}} FILE* \mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}} = NULL;}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00010}\mbox{\hyperlink{history_8c_a92f537e0a0314150b3c0817f45153999}{00010}} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{history_8c_a92f537e0a0314150b3c0817f45153999}{MAX\_LINE}} = 1024;}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00026}\mbox{\hyperlink{history_8c_a0ddf1224851353fc92bfbff6f499fa97}{00026}} \textcolor{keywordtype}{int} \mbox{\hyperlink{history_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}* argv[]) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00028}00028     \textcolor{keywordtype}{int} command\_counter = atoi(argv[1]);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00030}00030     \textcolor{keywordflow}{if} (argc > 6) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00031}00031         fprintf(stderr, \textcolor{stringliteral}{"{}Unexpected arguments\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00032}00032         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00033}00033     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00034}00034 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00035}00035     \textcolor{comment}{/* Redirects the error output stream to the specified file in the arguments (if present) */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00036}00036     FILE* \mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = stderr;}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00038}00038     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < argc; i++) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00039}00039         \textcolor{keywordflow}{if} (strcmp(argv[i], \textcolor{stringliteral}{"{}2>"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00040}00040             \textcolor{keywordflow}{if} (argv[i + 1] != NULL) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00041}00041                 \textcolor{keywordflow}{if} ((\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = fopen(argv[i + 1], \textcolor{stringliteral}{"{}a"{}})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00042}00042                     fprintf(stderr,\textcolor{stringliteral}{"{}Error while opening the error output stream\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00043}00043                     exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00044}00044                 \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00045}00045                 \textcolor{comment}{/* Set the error stream to unbeffered */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00046}00046                 \textcolor{keywordflow}{if} (setvbuf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, NULL, \_IONBF, 0) != 0) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00047}00047                     fprintf(stderr, \textcolor{stringliteral}{"{}Error while setting the error stream as unbuffered: \%s"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00048}00048                     exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00049}00049                 \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00050}00050             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00051}00051                 fprintf(stderr, \textcolor{stringliteral}{"{}Wrong arguments! Did you mean \(\backslash\)"{}2> error\_output\_file\(\backslash\)"{}?\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00052}00052                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00053}00053             \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00054}00054         \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00055}00055     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00056}00056     }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00057}00057     \textcolor{comment}{/* Updates number of arguments (excluding redirection arguments) */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00058}00058     \textcolor{keywordflow}{if} (\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} != stderr) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00059}00059         argc = argc -\/ 2;}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00060}00060     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00061}00061 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00062}00062     \textcolor{comment}{/* Checks arguments to understand in which mode the program should run */} }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00063}00063     \textcolor{keywordflow}{if} ((argc < 4 \&\& (command\_counter >= 0)) || (argc < 3 \&\& (command\_counter == -\/1))) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00064}00064         fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Too few arguments\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00065}00065         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00066}00066     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00068}00068     \textcolor{keywordflow}{if} (command\_counter < -\/1) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00069}00069         fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Wrong arguments\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00070}00070         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00071}00071     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00072}00072     }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00073}00073     \textcolor{comment}{/* Get the storage path for "{}.history"{} */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00074}00074     \textcolor{keywordtype}{char}* path = (\textcolor{keywordtype}{char}*)malloc(strlen(argv[2]) + strlen(\mbox{\hyperlink{history_8c_ab117546549783a058d0321a287699579}{FILE\_NAME}}) + 2);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00075}00075     strcpy(path, argv[2]);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00076}00076     strcat(path, \textcolor{stringliteral}{"{}/"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00077}00077     strcat(path, \mbox{\hyperlink{history_8c_ab117546549783a058d0321a287699579}{FILE\_NAME}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00079}00079     \textcolor{keywordflow}{if} (command\_counter >= 0) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00080}00080 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00081}00081         \textcolor{comment}{/* Open the file stream in write mode */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00082}00082         \textcolor{keywordflow}{if} (command\_counter == 0) \{     \textcolor{comment}{/* New session of myshell: truncate the file */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00083}00083             \textcolor{keywordflow}{if} ((\mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}} = fopen(path, \textcolor{stringliteral}{"{}w"{}})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00084}00084                 fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while opening file \(\backslash\)"{}.history\(\backslash\)"{}: \%s\(\backslash\)n"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00085}00085                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00086}00086             \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00087}00087         \} \textcolor{keywordflow}{else} \{                        \textcolor{comment}{/* Not a new session: append to the file */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00088}00088             \textcolor{keywordflow}{if} ((\mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}} = fopen(path, \textcolor{stringliteral}{"{}a"{}})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00089}00089                 fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while opening file \(\backslash\)"{}.history\(\backslash\)"{}: \%s\(\backslash\)n"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00090}00090                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00091}00091             \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00092}00092         \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00093}00093 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00094}00094         \textcolor{comment}{/* Print the line to "{}.history"{} */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00095}00095         \textcolor{keywordflow}{if} (fprintf(\mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}}, \textcolor{stringliteral}{"{}\%s \%s\(\backslash\)n"{}}, argv[1], argv[3]) <= 0) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00096}00096             fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while writing\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00097}00097             exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00098}00098         \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00099}00099 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00100}00100     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (command\_counter == -\/1) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00101}00101 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00102}00102         \textcolor{comment}{/* Open the file stream in read mode */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00103}00103         \textcolor{keywordflow}{if} ((\mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}} = fopen(path, \textcolor{stringliteral}{"{}r"{}})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00104}00104             fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while opening file \(\backslash\)"{}.history\(\backslash\)"{}: \%s\(\backslash\)n"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00105}00105             exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00106}00106         \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00107}00107 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00108}00108         \textcolor{comment}{/* Read each line of "{}.history"{} */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00109}00109         \textcolor{keywordtype}{char} buff[\mbox{\hyperlink{history_8c_a92f537e0a0314150b3c0817f45153999}{MAX\_LINE}}];}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00110}00110         \textcolor{keywordflow}{while} (fgets(buff, \mbox{\hyperlink{history_8c_a92f537e0a0314150b3c0817f45153999}{MAX\_LINE}}, \mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}}) != NULL) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00111}00111             }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00112}00112             \textcolor{comment}{//Print it on stdout}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00113}00113             \textcolor{keywordflow}{if} (fputs(buff, stdout) == EOF) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00114}00114                 fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error while printing to stdout\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00115}00115                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00116}00116             \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00117}00117         \} }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00118}00118     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00119}00119 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00120}00120     \textcolor{comment}{/* Close the stream */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00121}00121     \textcolor{keywordflow}{if} (fclose(\mbox{\hyperlink{history_8c_a359d238b0d498b0f28a8777169cc21a9}{history}}) == EOF) \{}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00122}00122         fprintf(stderr, \textcolor{stringliteral}{"{}Error while closing the stream\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00123}00123         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00124}00124     \}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00125}00125 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00126}00126     \textcolor{comment}{/* Closes the error stream */}}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00127}00127     fclose(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}});}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00128}00128 }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00129}00129     free(path);}
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00130}00130     \textcolor{keywordflow}{return} EXIT\_SUCCESS;    }
+\DoxyCodeLine{\Hypertarget{history_8c_source_l00131}00131 \}}
+
+\end{DoxyCode}

@@ -1,0 +1,93 @@
+.TH "src/history.c" 3 "Wed Dec 14 2022" "Version 1.0" "Myshell" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/history.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBFILE_NAME\fP   '\&.history'"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.RI "This program manages the history of the command successfully executed by the user\&. The history of myshell is kept inside a hidden filled '\&.history', stored in the original folder where the process myshell is launched\&. Depending on the value of 'command_counter', this program can write in append on the file '\&.history' (command_counter >= 0) or it can read from it and print its content on stdout (command_counter = -1)\&. It takes as inputs the total number of the executed commands, the name of the last command and the path for the storage of the file '\&.history'\&. 
+.br
+ "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "FILE * \fBhistory\fP = NULL"
+.br
+.ti -1c
+.RI "const int \fBMAX_LINE\fP = 1024"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define FILE_NAME   '\&.history'"
+
+.PP
+Definition at line \fB7\fP of file \fBhistory\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (int argc, char * argv[])"
+
+.PP
+This program manages the history of the command successfully executed by the user\&. The history of myshell is kept inside a hidden filled '\&.history', stored in the original folder where the process myshell is launched\&. Depending on the value of 'command_counter', this program can write in append on the file '\&.history' (command_counter >= 0) or it can read from it and print its content on stdout (command_counter = -1)\&. It takes as inputs the total number of the executed commands, the name of the last command and the path for the storage of the file '\&.history'\&. 
+.br
+ 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargv[1]\fP equivalent to the command counter\&. If set to -1, the file '\&.history' will be open on read\&. 
+.br
+\fIargv[2]\fP contains the absolute storage path, where the file '\&.history' will be saved 
+.br
+\fIargv[3]\fP if argv[1] >= 0, it holds the name of the last successfully executed command\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success, a non-zero integer on error\&. 
+.br
+ 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBhistory\&.c\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "FILE* history = NULL"
+
+.PP
+Definition at line \fB9\fP of file \fBhistory\&.c\fP\&.
+.SS "const int MAX_LINE = 1024"
+
+.PP
+Definition at line \fB10\fP of file \fBhistory\&.c\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Myshell from the source code\&.

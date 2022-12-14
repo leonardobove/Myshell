@@ -1,0 +1,272 @@
+\hypertarget{ls_8c}{}\doxysection{src/ls.c File Reference}
+\label{ls_8c}\index{src/ls.c@{src/ls.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$pwd.\+h$>$}\newline
+{\ttfamily \#include $<$grp.\+h$>$}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structfile}{file}}
+\item 
+struct \mbox{\hyperlink{structoption}{option}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ls_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\+\_\+\+BUFF}}~256
+\item 
+\#define \mbox{\hyperlink{ls_8c_af0c578eddb61211eb823c0079fe0b943}{FILES}}~0
+\item 
+\#define \mbox{\hyperlink{ls_8c_ad05090e5ab2f6154c5ab0cc370e5b9cd}{DIRS}}~1
+\item 
+\#define \mbox{\hyperlink{ls_8c_a1edd1ea8bddaf4d9c5eb3eae1ee1726a}{ALL}}~2
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}{add\+\_\+to\+\_\+list}} (struct \mbox{\hyperlink{structfile}{file}} $\ast$$\ast$last, const struct stat $\ast$sb, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em This function appends on top the passed entry of the directory to the specified list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}{free\+\_\+list}} (struct \mbox{\hyperlink{structfile}{file}} $\ast$$\ast$files)
+\begin{DoxyCompactList}\small\item\em This function deallocates the reserved space in the heap memory used for the lists. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\+\_\+error}} (const char $\ast$)
+\item 
+void \mbox{\hyperlink{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}{print\+\_\+list}} (struct \mbox{\hyperlink{structfile}{file}} $\ast$list, const char $\ast$title, struct \mbox{\hyperlink{structoption}{option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em This function prints the final output of the ls command, based on the selected options. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{ls_8c_a853216ac51aa181669ff4d3de74058a7}{print\+\_\+help}} ()
+\begin{DoxyCompactList}\small\item\em This function prints the help section for the ls command. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structoption}{option}} \mbox{\hyperlink{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}{options}} (int argc, char $\ast$$\ast$argv)
+\begin{DoxyCompactList}\small\item\em This function parses the argument string and select the desired options. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ls_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function emulates the ls command from the Unix shell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{ls_8c_ae586e9d2704af208b1aab12558672bb3}{print\+\_\+error}} (const char str\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em This function prints an error message on error\+\_\+stream, with format\+: \char`\"{}\+Error while $\ast$your string$\ast$                  \mbox{[}code $\ast$errno$\ast$, $\ast$strerror(errno)$\ast$\mbox{]}\char`\"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \mbox{\hyperlink{ls_8c_a7e04b9cb82ddcfa3678beb3f8672b99d}{ddir}} = NULL
+\item 
+FILE $\ast$ \mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\+\_\+stream}} = NULL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ls_8c_a1edd1ea8bddaf4d9c5eb3eae1ee1726a}\label{ls_8c_a1edd1ea8bddaf4d9c5eb3eae1ee1726a}} 
+\index{ls.c@{ls.c}!ALL@{ALL}}
+\index{ALL@{ALL}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{ALL}{ALL}}
+{\footnotesize\ttfamily \#define ALL~2}
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00014}{14}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_ad05090e5ab2f6154c5ab0cc370e5b9cd}\label{ls_8c_ad05090e5ab2f6154c5ab0cc370e5b9cd}} 
+\index{ls.c@{ls.c}!DIRS@{DIRS}}
+\index{DIRS@{DIRS}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{DIRS}{DIRS}}
+{\footnotesize\ttfamily \#define DIRS~1}
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00013}{13}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_af0c578eddb61211eb823c0079fe0b943}\label{ls_8c_af0c578eddb61211eb823c0079fe0b943}} 
+\index{ls.c@{ls.c}!FILES@{FILES}}
+\index{FILES@{FILES}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{FILES}{FILES}}
+{\footnotesize\ttfamily \#define FILES~0}
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00012}{12}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_a4b70916bdf28ed7afd94e4fb98230a90}\label{ls_8c_a4b70916bdf28ed7afd94e4fb98230a90}} 
+\index{ls.c@{ls.c}!MAX\_BUFF@{MAX\_BUFF}}
+\index{MAX\_BUFF@{MAX\_BUFF}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_BUFF}{MAX\_BUFF}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+BUFF~256}
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00011}{11}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}\label{ls_8c_a9b47af60215a8d1079f6e16bd24dfcdd}} 
+\index{ls.c@{ls.c}!add\_to\_list@{add\_to\_list}}
+\index{add\_to\_list@{add\_to\_list}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{add\_to\_list()}{add\_to\_list()}}
+{\footnotesize\ttfamily void add\+\_\+to\+\_\+list (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfile}{file}} $\ast$$\ast$}]{last,  }\item[{const struct stat $\ast$}]{sb,  }\item[{const char $\ast$}]{name }\end{DoxyParamCaption})}
+
+
+
+This function appends on top the passed entry of the directory to the specified list. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em last} & Pointer to the address of the last element of the passed list. \\
+\hline
+\mbox{\texttt{ in}}  & {\em sb} & Pointer to the file\textquotesingle{}s i-\/node \\
+\hline
+\mbox{\texttt{ in}}  & {\em name} & String of the file\textquotesingle{}s name \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00207}{207}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}\label{ls_8c_ac05b9acf7cea2785808ac35c170c3f3c}} 
+\index{ls.c@{ls.c}!free\_list@{free\_list}}
+\index{free\_list@{free\_list}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{free\_list()}{free\_list()}}
+{\footnotesize\ttfamily void free\+\_\+list (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfile}{file}} $\ast$$\ast$}]{files }\end{DoxyParamCaption})}
+
+
+
+This function deallocates the reserved space in the heap memory used for the lists. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em files} & Pointer to the address of the last element of the list, which has to be freed. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00288}{288}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{ls_8c_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{ls.c@{ls.c}!main@{main}}
+\index{main@{main}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function emulates the ls command from the Unix shell. 
+
+\begin{DoxyNote}{Note}
+The options must be preceded by a dash \textquotesingle{}-\/\textquotesingle{}. 
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em argv\mbox{[}1\mbox{]}} & Desired path on which the ls will be executed \\
+\hline
+\mbox{\texttt{ in}}  & {\em argv\mbox{[}2\mbox{]}} & Options (Try \char`\"{}ls -\/h\char`\"{} for more informations). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 on success, 1 on error. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00049}{49}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}\label{ls_8c_a04960137ebea8bfe4ec58dd9c8ed920d}} 
+\index{ls.c@{ls.c}!options@{options}}
+\index{options@{options}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{options()}{options()}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structoption}{option}} options (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+This function parses the argument string and select the desired options. 
+
+\begin{DoxyReturn}{Returns}
+Returns an option structure containing the flags relative to the desired options. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00162}{162}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}\label{ls_8c_adcb6aefe08fea089f7bb47a2ff73cc48}} 
+\index{ls.c@{ls.c}!print\_error@{print\_error}}
+\index{print\_error@{print\_error}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{print\_error()}{print\_error()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void print\+\_\+error (\begin{DoxyParamCaption}\item[{const char $\ast$}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ls_8c_ae586e9d2704af208b1aab12558672bb3}\label{ls_8c_ae586e9d2704af208b1aab12558672bb3}} 
+\index{ls.c@{ls.c}!print\_error@{print\_error}}
+\index{print\_error@{print\_error}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{print\_error()}{print\_error()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void print\+\_\+error (\begin{DoxyParamCaption}\item[{const char}]{str\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+This function prints an error message on error\+\_\+stream, with format\+: \char`\"{}\+Error while $\ast$your string$\ast$                  \mbox{[}code $\ast$errno$\ast$, $\ast$strerror(errno)$\ast$\mbox{]}\char`\"{}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em str} & Your costant string, which will be pasted inside the error message. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00325}{325}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_a853216ac51aa181669ff4d3de74058a7}\label{ls_8c_a853216ac51aa181669ff4d3de74058a7}} 
+\index{ls.c@{ls.c}!print\_help@{print\_help}}
+\index{print\_help@{print\_help}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{print\_help()}{print\_help()}}
+{\footnotesize\ttfamily void print\+\_\+help (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This function prints the help section for the ls command. 
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00306}{306}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}\label{ls_8c_a5dc023670b8ffae148ecc6613d9e75d5}} 
+\index{ls.c@{ls.c}!print\_list@{print\_list}}
+\index{print\_list@{print\_list}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{print\_list()}{print\_list()}}
+{\footnotesize\ttfamily void print\+\_\+list (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfile}{file}} $\ast$}]{list,  }\item[{const char $\ast$}]{title,  }\item[{struct \mbox{\hyperlink{structoption}{option}} $\ast$}]{opt }\end{DoxyParamCaption})}
+
+
+
+This function prints the final output of the ls command, based on the selected options. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em list} & List of files inside the desired directory (pointer to the last element of the list). \\
+\hline
+\mbox{\texttt{ in}}  & {\em title} & First line of the output. \\
+\hline
+\mbox{\texttt{ in}}  & {\em opt} & Selected option flag structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00238}{238}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ls_8c_a7e04b9cb82ddcfa3678beb3f8672b99d}\label{ls_8c_a7e04b9cb82ddcfa3678beb3f8672b99d}} 
+\index{ls.c@{ls.c}!ddir@{ddir}}
+\index{ddir@{ddir}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{ddir}{ddir}}
+{\footnotesize\ttfamily char$\ast$ ddir = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00029}{29}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+
+\mbox{\Hypertarget{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}\label{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}} 
+\index{ls.c@{ls.c}!error\_stream@{error\_stream}}
+\index{error\_stream@{error\_stream}!ls.c@{ls.c}}
+\doxysubsubsection{\texorpdfstring{error\_stream}{error\_stream}}
+{\footnotesize\ttfamily FILE$\ast$ error\+\_\+stream = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{ls_8c_source_l00039}{39}} of file \mbox{\hyperlink{ls_8c_source}{ls.\+c}}.
+

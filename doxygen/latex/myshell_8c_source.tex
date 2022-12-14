@@ -1,0 +1,440 @@
+\hypertarget{myshell_8c_source}{}\doxysection{myshell.\+c}
+\label{myshell_8c_source}\index{src/myshell.c@{src/myshell.c}}
+\mbox{\hyperlink{myshell_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00001}00001 \textcolor{preprocessor}{\#include <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00002}00002 \textcolor{preprocessor}{\#include <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00003}00003 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00004}00004 \textcolor{preprocessor}{\#include <errno.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00005}00005 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00006}00006 \textcolor{preprocessor}{\#include <signal.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00007}00007 \textcolor{preprocessor}{\#include <limits.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00008}00008 \textcolor{preprocessor}{\#include <sys/wait.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00009}00009 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00011}\mbox{\hyperlink{myshell_8c_ae711e07378a40de753b6275a837c9200}{00011}} \textcolor{preprocessor}{\#define default\_name "{}guest"{}}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00012}\mbox{\hyperlink{myshell_8c_accdbea14ea06c15e271784368bd993e8}{00012}} \textcolor{preprocessor}{\#define PROMPT "{}@myshell\# "{}}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00013}\mbox{\hyperlink{myshell_8c_abe2fedc3a963bcd397037e60e16adabb}{00013}} \textcolor{preprocessor}{\#define filename "{}/mainv2"{}}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00014}\mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{00014}} \textcolor{preprocessor}{\#define MAX\_BUFF 256}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00015}\mbox{\hyperlink{myshell_8c_a2e7620041ccf5bc13755c9f28524d22e}{00015}} \textcolor{preprocessor}{\#define MAX\_ARG  20}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00016}\mbox{\hyperlink{myshell_8c_a844f4739306016d5b999690b18f25a45}{00016}} \textcolor{preprocessor}{\#define H\_READ   -\/1}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00018}00018 \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_a4b515337891f74ebd79cb307db16bf33}{sigint\_handler}}(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00019}\mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{00019}} \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{setup}}(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{char}**);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00020}00020 \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{loop}}();}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00021}00021 \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}{update\_path}}(\textcolor{keywordtype}{char}*);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00022}00022 \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}{exit\_command}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00023}\mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{00023}} \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}*);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00024}00024 \textcolor{keywordtype}{void} \mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{clear\_args}}(\textcolor{keywordtype}{char}** args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00025}00025 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00026}00026 \textcolor{keywordtype}{char}*  \mbox{\hyperlink{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}{read\_command}}(\textcolor{keywordtype}{char}*);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00028}00028 \textcolor{keywordtype}{int} \mbox{\hyperlink{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}{parse\_command}}(\textcolor{keywordtype}{char}*, \textcolor{keywordtype}{char}**);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00029}\mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{00029}} \textcolor{keywordtype}{int} \mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{prepare\_history}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int}, \textcolor{keyword}{const} \textcolor{keywordtype}{char}*, \textcolor{keyword}{const} \textcolor{keywordtype}{char}*, \textcolor{keywordtype}{char}**);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00030}\mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{00030}} \textcolor{keywordtype}{int} \mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\_command}}(\textcolor{keywordtype}{char}**);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00031}\mbox{\hyperlink{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}{00031}} \textcolor{keywordtype}{int} \mbox{\hyperlink{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}{cd}}(\textcolor{keywordtype}{char}**);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00032}00032 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00033}\mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{00033}} \textcolor{keywordtype}{char}* \mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}} = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00034}\mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{00034}} \textcolor{keywordtype}{char}* \mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}} = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00035}\mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{00035}} \textcolor{keywordtype}{char}* \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}} = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00036}\mbox{\hyperlink{myshell_8c_a9cc709875e24344ad0a7fb9584114ffd}{00036}} \textcolor{keywordtype}{char}* \mbox{\hyperlink{myshell_8c_a9cc709875e24344ad0a7fb9584114ffd}{err\_file\_path}} = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00046}00046 \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00047}\mbox{\hyperlink{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}{00047}} \mbox{\hyperlink{myshell_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}* argv[]) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00048}00048     \textcolor{comment}{/* Set stderr to default stderr */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00049}00049     stderr = stderr;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00050}00050 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00051}00051     \mbox{\hyperlink{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}{update\_path}}(argv[0]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00053}00053     \textcolor{comment}{/* Setup function */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00054}00054     \mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{setup}}(argc, argv);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00055}00055 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00056}00056     \textcolor{comment}{/* Loop function */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00057}00057     \mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{loop}}();}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00058}00058 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00067}00067 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00068}\mbox{\hyperlink{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}{00068}} \mbox{\hyperlink{myshell_8c_a6c0c86492feb55cab19d61a0447391ac}{update\_path}}(\textcolor{keywordtype}{char}* argv0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00069}00069     \textcolor{keywordtype}{char}* last\_occurence = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00070}00070     \textcolor{keywordflow}{if} ((last\_occurence = strrchr(argv0, \textcolor{charliteral}{'/'})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00071}00071         \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}updating the PATH variable"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00072}00072     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00073}00073 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00074}00074     \textcolor{keywordtype}{int} rel\_path\_length = (int)(last\_occurence -\/ argv0);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00075}00075     \textcolor{keywordtype}{char}* relative\_path = (\textcolor{keywordtype}{char}*)malloc(rel\_path\_length);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00076}00076     strncat(relative\_path, argv0, rel\_path\_length);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00077}00077 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00078}00078     \textcolor{comment}{/* Gets absolute bin path, given its relative path */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00079}00079     \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}} = realpath(relative\_path, \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00080}00080     setenv(\textcolor{stringliteral}{"{}PATH"{}}, \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}}, 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00082}00082     free(relative\_path);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00083}00083     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00084}00084 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00085}00085 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00093}00093 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00094}\mbox{\hyperlink{myshell_8c_a2b23bc0fe65aa619800183c7b031be9e}{00094}} \mbox{\hyperlink{myshell_8c_a08f60cd81848e6955b0b3c1c3fad712c}{setup}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}* argv[]) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00095}00095     FILE* stderr = stderr;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00096}00096 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00097}00097     \textcolor{comment}{/* Check if there's an exceeding number of arguments */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00098}00098     \textcolor{keywordflow}{if} (argc > 4) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00099}00099         fprintf(stderr, \textcolor{stringliteral}{"{}Unexpected arguments!\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00100}00100         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00101}00101     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00102}00102     }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00103}00103     \textcolor{comment}{/* Tries to add an exit handler */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00104}00104     \textcolor{keywordflow}{if} (atexit(\mbox{\hyperlink{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}{exit\_command}}) != 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00105}00105         fprintf(stderr, \textcolor{stringliteral}{"{}Cannot register exit handler.\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00106}00106         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00107}00107     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00108}00108 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00109}00109     \textcolor{comment}{/* Tries to add a SIGINT interrupt handler */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00110}00110     \textcolor{keywordflow}{if} (signal(SIGINT, \mbox{\hyperlink{myshell_8c_a4b515337891f74ebd79cb307db16bf33}{sigint\_handler}}) == SIG\_ERR) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00111}00111         fprintf(stderr, \textcolor{stringliteral}{"{}Error! Couldn't register SIGINT handler: \%s\(\backslash\)n"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00112}00112         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00113}00113     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00114}00114 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00115}00115     \textcolor{comment}{/* Chooses username */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00116}00116     \textcolor{keywordflow}{if} (argc == 1 \&\& (stderr == stderr)) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00117}00117         \mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}} = (\textcolor{keywordtype}{char}*)malloc(strlen(\mbox{\hyperlink{myshell_8c_ae711e07378a40de753b6275a837c9200}{default\_name}})+1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00118}00118         strcpy(\mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}}, \mbox{\hyperlink{myshell_8c_ae711e07378a40de753b6275a837c9200}{default\_name}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00119}00119     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00120}00120         \mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}} = (\textcolor{keywordtype}{char}*)malloc(strlen(argv[1])+1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00121}00121         strcpy(\mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}}, argv[1]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00122}00122     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00123}00123 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00124}00124     \textcolor{comment}{/* Initializes prompt string */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00125}00125     \mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}} = (\textcolor{keywordtype}{char}*)malloc(strlen(\mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}})+1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00126}00126     strcpy(\mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}}, \mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00127}00127     \mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}} = strcat(\mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}}, \mbox{\hyperlink{myshell_8c_accdbea14ea06c15e271784368bd993e8}{PROMPT}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00128}00128 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00129}00129     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00130}00130 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00131}00131 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00137}00137 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00138}\mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{00138}} \mbox{\hyperlink{myshell_8c_afe461d27b9c48d5921c00d521181f12f}{loop}}() \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00139}00139     \textcolor{keywordtype}{char}*  last\_command = NULL;     \textcolor{comment}{/* Name of the last successfully executed command */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00140}00140     \textcolor{keywordtype}{char}*  stdin\_buff = NULL;       \textcolor{comment}{/* Stdin buffer */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00141}00141     \textcolor{keywordtype}{char}*  args[\mbox{\hyperlink{myshell_8c_a2e7620041ccf5bc13755c9f28524d22e}{MAX\_ARG}}] = \{NULL\};  \textcolor{comment}{/* Array of strings, containing the arguments to pass */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00142}00142     \textcolor{keywordtype}{int}    exit\_status = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00143}00143     \textcolor{keywordtype}{int}    command\_counter = 0;     \textcolor{comment}{/* Successfully executed command counter */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00144}00144     }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00145}00145 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00146}00146     \textcolor{comment}{/* Starts loop */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00147}00147     \textcolor{keywordflow}{while} (1) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00148}00148 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00149}00149         \textcolor{comment}{/* Print the prompt */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00150}00150         printf(\textcolor{stringliteral}{"{}\%s"{}}, \mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00151}00151 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00152}00152         \textcolor{comment}{/* Read the command */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00153}00153         stdin\_buff = \mbox{\hyperlink{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}{read\_command}}(stdin\_buff);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00154}00154 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00155}00155         \textcolor{keywordflow}{if} (stdin\_buff == NULL) \{   \textcolor{comment}{/* Nothing was read: error */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00156}00156             \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}reading"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00157}00157             exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00158}00158         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(stdin\_buff, \textcolor{stringliteral}{"{}\(\backslash\)n"{}}) == 0) \{ \textcolor{comment}{/* Read \(\backslash\)n: prompt again */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00159}00159             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00160}00160         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00161}00161 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00162}00162         \textcolor{comment}{/* Parse the command */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00163}00163         \textcolor{keywordflow}{if} (\mbox{\hyperlink{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}{parse\_command}}(stdin\_buff, args) == EOF) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00164}00164             \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}parsing the command"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00165}00165             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00166}00166         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00167}00167 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00168}00168         \textcolor{comment}{/* Selects command */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00169}00169         \textcolor{keywordflow}{if} (strcmp (args[0], \textcolor{stringliteral}{"{}cd"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00170}00170             exit\_status = \mbox{\hyperlink{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}{cd}}(args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00171}00171         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00172}00172         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(args[0], \textcolor{stringliteral}{"{}ls"{}}) == 0 || strcmp(args[0], \textcolor{stringliteral}{"{}pwd"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00173}00173             exit\_status = \mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\_command}}(args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00174}00174         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00175}00175         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(args[0], \textcolor{stringliteral}{"{}history"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00176}00176             \textcolor{keywordflow}{if} (\mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{prepare\_history}}(\mbox{\hyperlink{myshell_8c_a844f4739306016d5b999690b18f25a45}{H\_READ}}, \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}}, last\_command, args) == EOF) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00177}00177                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}preparing history"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00178}00178                 \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00179}00179             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00180}00180 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00181}00181             exit\_status = \mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\_command}}(args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00182}00182 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00183}00183         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp (args[0], \textcolor{stringliteral}{"{}exit"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00184}00184             \textcolor{comment}{/* Add exit command to .history file */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00185}00185             \textcolor{keywordflow}{if} (\mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{prepare\_history}}(command\_counter, \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}}, \textcolor{stringliteral}{"{}exit"{}}, args) == EOF) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00186}00186                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}preparing history"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00187}00187                 \textcolor{comment}{/* No continue instruction is used, let the process exit anyways */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00188}00188             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00189}00189 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00190}00190             \textcolor{comment}{/* Run "{}history"{} and check its exit status */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00191}00191             \textcolor{keywordflow}{if} (\mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\_command}}(args) == EXIT\_FAILURE) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00192}00192                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}executing history"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00193}00193                 \textcolor{comment}{/* No continue instruction is used, let the process exit anyways */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00194}00194             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00195}00195 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00196}00196             \textcolor{comment}{/* Frees all the dynamically allocated memory */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00197}00197             \textcolor{comment}{/* String username is not freed, the exit handler function needs it */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00198}00198             \mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{clear\_args}}(args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00199}00199             free(last\_command);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00200}00200             free(stdin\_buff);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00201}00201             free(\mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00202}00202             free(\mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00203}00203 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00204}00204             \textcolor{comment}{/* Exit through exit handler */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00205}00205             exit(EXIT\_SUCCESS);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00206}00206         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00207}00207         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00208}00208             exit\_status = EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00209}00209             printf(\textcolor{stringliteral}{"{}bash: \%s: command not found\(\backslash\)n"{}}, args[0]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00210}00210             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00211}00211         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00212}00212 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00213}00213         \textcolor{comment}{/* Check the exit status of the last command. Add it to history if it succeeded. */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00214}00214         \textcolor{keywordflow}{if} (exit\_status == EXIT\_SUCCESS) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00215}00215             last\_command = (\textcolor{keywordtype}{char}*)realloc(last\_command, strlen(args[0]) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00216}00216             strcpy(last\_command, args[0]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00217}00217 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00218}00218             \textcolor{keywordflow}{if} (\mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{prepare\_history}}(command\_counter, \mbox{\hyperlink{myshell_8c_a96eec5f5fffb2e552b7241dca3c2dca8}{bin\_path}}, last\_command, args) == EOF) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00219}00219                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}preparing history"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00220}00220                 \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00221}00221             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00222}00222 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00223}00223             \textcolor{comment}{/* Run "{}history"{} and check its exit status */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00224}00224             \textcolor{keywordflow}{if} (\mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\_command}}(args) == EXIT\_FAILURE) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00225}00225                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}executing history"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00226}00226             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00227}00227                 command\_counter++;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00228}00228             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00229}00229 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00230}00230         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00231}00231 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00232}00232         \mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{clear\_args}}(args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00233}00233     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00234}00234 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00235}00235 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00242}00242 \textcolor{keywordtype}{char}*}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00243}\mbox{\hyperlink{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}{00243}} \mbox{\hyperlink{myshell_8c_a5f6af75fdbfffbac494c2ad4ab3c84e7}{read\_command}}(\textcolor{keywordtype}{char}* stdin\_buff) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00244}00244     \textcolor{keywordtype}{char} tempbuf[\mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\_BUFF}}]; \textcolor{comment}{/* Temporary buffer */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00245}00245     \textcolor{keywordtype}{size\_t} inputlen = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00246}00246     \textcolor{keywordtype}{size\_t} templen = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00247}00247 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00248}00248     \textcolor{comment}{/* Store at most MAX\_BUFF chars in tempbuf and append them in stdin\_buff. */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00249}00249     \textcolor{comment}{/* If stdin stream has still content, repeat until new line.              */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00250}00250     \textcolor{keywordflow}{do} \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00251}00251         \textcolor{keywordflow}{if} (fgets(tempbuf, \mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\_BUFF}}, stdin) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00252}00252             \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}reading from stdin"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00253}00253             \textcolor{keywordflow}{return} NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00254}00254         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00255}00255 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00256}00256         templen = strlen(tempbuf);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00257}00257         stdin\_buff = realloc(stdin\_buff, inputlen + templen + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00258}00258 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00259}00259         \textcolor{keywordflow}{if} (stdin\_buff == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00260}00260             \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}reading from stdin"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00261}00261             \textcolor{keywordflow}{return} NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00262}00262         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00263}00263 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00264}00264         strcpy(stdin\_buff + inputlen, tempbuf);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00265}00265         inputlen += templen;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00266}00266     \} \textcolor{keywordflow}{while} (templen == \mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\_BUFF}}-\/1 \&\& tempbuf[\mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\_BUFF}}-\/2] != \textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00267}00267 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00268}00268     \textcolor{keywordflow}{return} stdin\_buff;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00269}00269 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00270}00270 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00279}00279 \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00280}\mbox{\hyperlink{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}{00280}} \mbox{\hyperlink{myshell_8c_a3650f9fd353dd47dc5b08a0f30219e53}{parse\_command}}(\textcolor{keywordtype}{char}* \textcolor{keywordtype}{string}, \textcolor{keywordtype}{char}** args\_vect) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00281}00281     \textcolor{keywordtype}{int} is\_word = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00282}00282     \textcolor{keywordtype}{int} arg\_num = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00283}00283     \textcolor{keywordtype}{char} buff[\mbox{\hyperlink{myshell_8c_a4b70916bdf28ed7afd94e4fb98230a90}{MAX\_BUFF}}] = \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00284}00284 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00285}00285     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < strlen(\textcolor{keywordtype}{string}); i++) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00286}00286         \textcolor{keywordtype}{char} c = \textcolor{keywordtype}{string}[i];}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00287}00287 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00288}00288         \textcolor{comment}{/* Check if it's an alphanumerical character (i.e. plausible text) */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00289}00289         }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00290}00290         \textcolor{keywordflow}{if} (c != \textcolor{charliteral}{'\(\backslash\)0'} \&\& c != \textcolor{charliteral}{' '} \&\& c != \textcolor{charliteral}{'\(\backslash\)n'}) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00291}00291             is\_word = 1;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00292}00292             strncat(buff, \&c, 1);   \textcolor{comment}{/*Concatenates chars until assembling the first isolated word in the user input */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00293}00293         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00294}00294 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00295}00295         \textcolor{keywordflow}{if} (c == \textcolor{charliteral}{' '} || c == \textcolor{charliteral}{'\(\backslash\)n'}) \{ }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00296}00296             \textcolor{keywordflow}{if} (is\_word == 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00297}00297                 \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00298}00298             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00299}00299                 \textcolor{comment}{/* Adds the word found to the arguments' array */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00300}00300                 args\_vect[arg\_num] = (\textcolor{keywordtype}{char}*)malloc(strlen(buff) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00301}00301 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00302}00302                 \textcolor{keywordflow}{if} (args\_vect[arg\_num] == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00303}00303                     \textcolor{keywordflow}{return} EOF;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00304}00304                 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00305}00305 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00306}00306                 strcpy(args\_vect[arg\_num], buff);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00307}00307                 arg\_num++;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00308}00308                 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00309}00309                 \textcolor{comment}{/* Clears the buffer made for containing each word */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00310}00310                 buff[0] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00311}00311                 is\_word = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00312}00312             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00313}00313         \} }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00314}00314     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00315}00315 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00316}00316     \textcolor{comment}{/* Adds the arguments' array terminator, i.e. NULL pointer */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00317}00317     args\_vect[arg\_num++] = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00318}00318 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00319}00319     \textcolor{keywordflow}{return} 0; }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00320}00320 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00321}00321 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00336}00336 \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00337}\mbox{\hyperlink{myshell_8c_ad756d3bec579838f7595141ea44d5689}{00337}} \mbox{\hyperlink{myshell_8c_a344ae4a1607ac2e6fd99d27ec75c1bf9}{prepare\_history}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} command\_counter, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* storage\_path, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* last\_command, \textcolor{keywordtype}{char}* args[]) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00338}00338     \textcolor{comment}{/* Clear the arguments' array */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00339}00339     \mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{clear\_args}}(args);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00340}00340     }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00341}00341     \textcolor{comment}{/* Allocates enough characters, in order to contain the integer command\_counter converted into a string */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00342}00342     \textcolor{keywordtype}{int} size = 1;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00343}00343     \textcolor{keywordtype}{int} \_command\_counter = command\_counter;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00344}00344 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00345}00345     \textcolor{keywordflow}{if} (command\_counter >= 0) \{     \textcolor{comment}{/* Open "{}.history"{} file on write in append */}        }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00346}00346         \textcolor{comment}{/* Counts how many digits there are inside integer command\_counter*/}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00347}00347         \textcolor{keywordflow}{while} ((\_command\_counter / 10) != 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00348}00348             size++;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00349}00349             \_command\_counter = \_command\_counter / 10;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00350}00350         \} }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00351}00351 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00352}00352         \textcolor{comment}{/* Prepare the first argument */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00353}00353         args[1] = (\textcolor{keywordtype}{char}*)malloc((\textcolor{keywordtype}{size\_t})(size + 1));}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00354}00354         \textcolor{keywordflow}{if} (args[1] == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00355}00355             \textcolor{keywordflow}{return} EOF;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00356}00356         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00357}00357 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00358}00358         \textcolor{comment}{/* Prepare the third argument */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00359}00359         args[3] = (\textcolor{keywordtype}{char}*)malloc(strlen(last\_command) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00360}00360         \textcolor{keywordflow}{if} (args[3] == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00361}00361             \textcolor{keywordflow}{return} EOF;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00362}00362         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00363}00363         strcpy(args[3], last\_command);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00364}00364 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00365}00365         \textcolor{comment}{/* Sets the terminator of the arguments' string */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00366}00366         args[4] = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00367}00367 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00368}00368     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (command\_counter == \mbox{\hyperlink{myshell_8c_a844f4739306016d5b999690b18f25a45}{H\_READ}}) \{     \textcolor{comment}{/* Open "{}.history"{} file on read */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00369}00369         \textcolor{comment}{/* Prepare the first argument */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00370}00370         size = (int)strlen(\textcolor{stringliteral}{"{}-\/1"{}}) + 1;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00371}00371         args[1] = (\textcolor{keywordtype}{char}*)malloc(strlen(\textcolor{stringliteral}{"{}-\/1"{}}) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00372}00372         \textcolor{keywordflow}{if} (args[1] == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00373}00373             \textcolor{keywordflow}{return} EOF;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00374}00374         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00375}00375 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00376}00376         \textcolor{comment}{/* Sets the terminator of the arguments' string */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00377}00377         args[3] = NULL;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00378}00378     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00379}00379 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00380}00380     \textcolor{comment}{/* Sets the argument containing the name of the command history */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00381}00381     args[0] = (\textcolor{keywordtype}{char}*)malloc(strlen(\textcolor{stringliteral}{"{}history"{}}) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00382}00382     \textcolor{keywordflow}{if} (args[0] == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00383}00383             \textcolor{keywordflow}{return} EOF;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00384}00384         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00385}00385     strcpy (args[0], \textcolor{stringliteral}{"{}history"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00386}00386 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00387}00387     \textcolor{comment}{/* Converts the integer command\_counter to a string, by printing it on the very same string */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00388}00388     \textcolor{comment}{/* snprintf() is used in order to avoid overflow errors */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00389}00389     snprintf(args[1], (\textcolor{keywordtype}{size\_t})(size + 1), \textcolor{stringliteral}{"{}\%d"{}}, command\_counter);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00390}00390 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00391}00391     \textcolor{comment}{/* Prepare the second argument for both cases */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00392}00392     args[2] = (\textcolor{keywordtype}{char}*)malloc(strlen(storage\_path) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00393}00393     \textcolor{keywordflow}{if} (args[2] == NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00394}00394             \textcolor{keywordflow}{return} EOF;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00395}00395         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00396}00396     strcpy(args[2], storage\_path);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00397}00397 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00398}00398     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00399}00399 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00400}00400 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00407}\mbox{\hyperlink{myshell_8c_a6ee6f1fb2cd8c63686b5a2751f798c30}{00407}} \textcolor{keywordtype}{int} \mbox{\hyperlink{myshell_8c_ae9b2ca3028a0dc9a4bf882bf71d17b73}{run\_command}}(\textcolor{keywordtype}{char}* args[]) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00408}00408         \textcolor{comment}{/* start forking */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00409}00409         \textcolor{keywordtype}{int} status;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00410}00410         pid\_t pid;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00411}00411         }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00412}00412         \textcolor{keywordflow}{if} ((pid = fork()) < 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00413}00413             \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}forking"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00414}00414             \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00415}00415         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00416}00416         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (pid == 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00417}00417             \textcolor{comment}{/* child process */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00418}00418             \textcolor{keywordflow}{if} (execvp(args[0], args) == EOF)\{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00419}00419                 fprintf(stderr, \textcolor{stringliteral}{"{}process: \%s\(\backslash\)n"{}}, args[0]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00420}00420                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}executing child process"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00421}00421                 \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00422}00422             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00423}00423         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00424}00424         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00425}00425             \textcolor{comment}{/* parent process */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00426}00426             \textcolor{keywordflow}{if} (wait(\&status) < 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00427}00427                 \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}waiting"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00428}00428                 \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00429}00429             \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00430}00430             \textcolor{keywordflow}{if} (WIFEXITED(status) \&\& WEXITSTATUS(status) == EXIT\_SUCCESS)}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00431}00431                 \textcolor{keywordflow}{return} EXIT\_SUCCESS;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00432}00432             \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00433}00433                 \textcolor{keywordflow}{return} EXIT\_FAILURE;            }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00434}00434         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00435}00435         \textcolor{comment}{//return EXIT\_SUCCESS;}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00436}00436 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00437}00437 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00443}\mbox{\hyperlink{myshell_8c_ac5c06438f6ef863e1aa06cca7d1c583d}{00443}} \textcolor{keywordtype}{int} \mbox{\hyperlink{myshell_8c_aa21d3dfe8a784ee97746cda09bca36fc}{cd}}(\textcolor{keywordtype}{char}* args[]) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00444}00444     \textcolor{keywordtype}{int} arg\_num = 0;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00445}00445     \textcolor{keywordflow}{while} (args[arg\_num] != NULL) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00446}00446         arg\_num++;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00447}00447     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00448}00448 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00449}00449     \textcolor{keywordtype}{char}* newdir;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00450}00450 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00451}00451     \textcolor{keywordflow}{if} (arg\_num > 2) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00452}00452         fprintf(stderr, \textcolor{stringliteral}{"{}Unexpected arguments\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00453}00453         \textcolor{keywordflow}{return} EXIT\_FAILURE;    }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00454}00454     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00455}00455     }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00456}00456     \textcolor{keywordflow}{if} (arg\_num == 2) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00457}00457         newdir = (\textcolor{keywordtype}{char}*)malloc(strlen(args[1]) + 1);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00458}00458         strcpy(newdir, args[1]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00459}00459         \textcolor{keywordflow}{if} (chdir(newdir) < 0) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00460}00460             \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{stringliteral}{"{}opening"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00461}00461             \textcolor{keywordflow}{return} EXIT\_FAILURE;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00462}00462         \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00463}00463     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00464}00464 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00465}00465     \textcolor{keywordflow}{return} EXIT\_SUCCESS;}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00466}00466 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00467}00467 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00472}00472 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00473}\mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{00473}} \mbox{\hyperlink{myshell_8c_aaded456e943f85d7cd5522dd427a4796}{clear\_args}}(\textcolor{keywordtype}{char}** args) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00474}00474     \textcolor{comment}{/* Frees each string in the array */}    }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00475}00475     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{myshell_8c_a2e7620041ccf5bc13755c9f28524d22e}{MAX\_ARG}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00476}00476         free(args[i]);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00477}00477         args[i] = NULL; }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00478}00478     \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00479}00479     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00480}00480 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00481}00481 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00487}00487 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00488}\mbox{\hyperlink{myshell_8c_ae586e9d2704af208b1aab12558672bb3}{00488}} \mbox{\hyperlink{myshell_8c_adcb6aefe08fea089f7bb47a2ff73cc48}{print\_error}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} str[]) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00489}00489     fprintf(stderr, \textcolor{stringliteral}{"{}Error while \%s [code \%d, \%s] \(\backslash\)n"{}}, str, errno, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00490}00490     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00491}00491 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00492}00492 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00497}00497 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00498}\mbox{\hyperlink{myshell_8c_a4b515337891f74ebd79cb307db16bf33}{00498}} \mbox{\hyperlink{myshell_8c_a4b515337891f74ebd79cb307db16bf33}{sigint\_handler}}(\textcolor{keywordtype}{int} signo) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00499}00499     \textcolor{comment}{/* Notifies the user about the right procedure in order to close Myshell */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00500}00500     printf(\textcolor{stringliteral}{"{}\(\backslash\)nTo close myshell, type \(\backslash\)"{}exit\(\backslash\)"{}\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00501}00501     printf(\textcolor{stringliteral}{"{}\%s"{}}, \mbox{\hyperlink{myshell_8c_a881961d263cfa8c42ca67419559b3c00}{prompt}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00502}00502     fflush(stdout);}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00503}00503     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00504}00504 \}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00505}00505 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00509}00509 \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00510}\mbox{\hyperlink{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}{00510}} \mbox{\hyperlink{myshell_8c_a7e16dfd32a6ac073696d468279aa86b0}{exit\_command}}(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00511}00511     printf(\textcolor{stringliteral}{"{}Goodbye, \%s!\(\backslash\)n"{}}, \mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00512}00512 }
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00513}00513     \textcolor{comment}{/* Deallocates the space reserved in the heap for the "{}username"{} string */}}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00514}00514     free(\mbox{\hyperlink{myshell_8c_a9b20c006bd90a09e1465fb668700e81d}{username}});}
+\DoxyCodeLine{\Hypertarget{myshell_8c_source_l00515}00515 \}}
+
+\end{DoxyCode}

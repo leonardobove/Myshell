@@ -1,0 +1,239 @@
+.TH "src/ls.c" 3 "Wed Dec 14 2022" "Version 1.0" "Myshell" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/ls.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <dirent\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <pwd\&.h>\fP
+.br
+\fC#include <grp\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBfile\fP"
+.br
+.ti -1c
+.RI "struct \fBoption\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBMAX_BUFF\fP   256"
+.br
+.ti -1c
+.RI "#define \fBFILES\fP   0"
+.br
+.ti -1c
+.RI "#define \fBDIRS\fP   1"
+.br
+.ti -1c
+.RI "#define \fBALL\fP   2"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBadd_to_list\fP (struct \fBfile\fP **last, const struct stat *sb, const char *name)"
+.br
+.RI "This function appends on top the passed entry of the directory to the specified list\&. "
+.ti -1c
+.RI "void \fBfree_list\fP (struct \fBfile\fP **files)"
+.br
+.RI "This function deallocates the reserved space in the heap memory used for the lists\&. "
+.ti -1c
+.RI "void \fBprint_error\fP (const char *)"
+.br
+.ti -1c
+.RI "void \fBprint_list\fP (struct \fBfile\fP *list, const char *title, struct \fBoption\fP *opt)"
+.br
+.RI "This function prints the final output of the ls command, based on the selected options\&. "
+.ti -1c
+.RI "void \fBprint_help\fP ()"
+.br
+.RI "This function prints the help section for the ls command\&. "
+.ti -1c
+.RI "struct \fBoption\fP \fBoptions\fP (int argc, char **argv)"
+.br
+.RI "This function parses the argument string and select the desired options\&. "
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.RI "This function emulates the ls command from the Unix shell\&. "
+.ti -1c
+.RI "void \fBprint_error\fP (const char str[])"
+.br
+.RI "This function prints an error message on error_stream, with format: 'Error while *your string*
+                 [code *errno*, *strerror(errno)*]'\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "char * \fBddir\fP = NULL"
+.br
+.ti -1c
+.RI "FILE * \fBerror_stream\fP = NULL"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ALL   2"
+
+.PP
+Definition at line \fB14\fP of file \fBls\&.c\fP\&.
+.SS "#define DIRS   1"
+
+.PP
+Definition at line \fB13\fP of file \fBls\&.c\fP\&.
+.SS "#define FILES   0"
+
+.PP
+Definition at line \fB12\fP of file \fBls\&.c\fP\&.
+.SS "#define MAX_BUFF   256"
+
+.PP
+Definition at line \fB11\fP of file \fBls\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void add_to_list (struct \fBfile\fP ** last, const struct stat * sb, const char * name)"
+
+.PP
+This function appends on top the passed entry of the directory to the specified list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlast\fP Pointer to the address of the last element of the passed list\&. 
+.br
+\fIsb\fP Pointer to the file's i-node 
+.br
+\fIname\fP String of the file's name 
+.RE
+.PP
+
+.PP
+Definition at line \fB207\fP of file \fBls\&.c\fP\&.
+.SS "void free_list (struct \fBfile\fP ** files)"
+
+.PP
+This function deallocates the reserved space in the heap memory used for the lists\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfiles\fP Pointer to the address of the last element of the list, which has to be freed\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB288\fP of file \fBls\&.c\fP\&.
+.SS "int main (int argc, char * argv[])"
+
+.PP
+This function emulates the ls command from the Unix shell\&. 
+.PP
+\fBNote\fP
+.RS 4
+The options must be preceded by a dash '-'\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIargv[1]\fP Desired path on which the ls will be executed 
+.br
+\fIargv[2]\fP Options (Try 'ls -h' for more informations)\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success, 1 on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB49\fP of file \fBls\&.c\fP\&.
+.SS "struct \fBoption\fP options (int argc, char ** argv)"
+
+.PP
+This function parses the argument string and select the desired options\&. 
+.PP
+\fBReturns\fP
+.RS 4
+Returns an option structure containing the flags relative to the desired options\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB162\fP of file \fBls\&.c\fP\&.
+.SS "void print_error (const char *)"
+
+.SS "void print_error (const char str[])"
+
+.PP
+This function prints an error message on error_stream, with format: 'Error while *your string*
+                 [code *errno*, *strerror(errno)*]'\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Your costant string, which will be pasted inside the error message\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB325\fP of file \fBls\&.c\fP\&.
+.SS "void print_help ()"
+
+.PP
+This function prints the help section for the ls command\&. 
+.PP
+Definition at line \fB306\fP of file \fBls\&.c\fP\&.
+.SS "void print_list (struct \fBfile\fP * list, const char * title, struct \fBoption\fP * opt)"
+
+.PP
+This function prints the final output of the ls command, based on the selected options\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlist\fP List of files inside the desired directory (pointer to the last element of the list)\&. 
+.br
+\fItitle\fP First line of the output\&. 
+.br
+\fIopt\fP Selected option flag structure\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB238\fP of file \fBls\&.c\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char* ddir = NULL"
+
+.PP
+Definition at line \fB29\fP of file \fBls\&.c\fP\&.
+.SS "FILE* error_stream = NULL"
+
+.PP
+Definition at line \fB39\fP of file \fBls\&.c\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Myshell from the source code\&.

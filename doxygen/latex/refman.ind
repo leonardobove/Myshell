@@ -1,0 +1,195 @@
+\begin{theindex}
+
+  \item {a\_hidden}
+    \subitem {option}, \hyperpage{6}
+  \item {add\_to\_list}
+    \subitem {ls.c}, \hyperpage{14}
+  \item {ALL}
+    \subitem {ls.c}, \hyperpage{13}
+
+  \indexspace
+
+  \item {bin\_path}
+    \subitem {myshell.c}, \hyperpage{29}
+
+  \indexspace
+
+  \item {cd}
+    \subitem {myshell.c}, \hyperpage{23}
+  \item {clear\_args}
+    \subitem {myshell.c}, \hyperpage{23}
+
+  \indexspace
+
+  \item {ddir}
+    \subitem {ls.c}, \hyperpage{16}
+  \item {default\_name}
+    \subitem {myshell.c}, \hyperpage{22}
+  \item {desired}
+    \subitem {option}, \hyperpage{6}
+  \item {DIRS}
+    \subitem {ls.c}, \hyperpage{13}
+
+  \indexspace
+
+  \item {err\_file\_path}
+    \subitem {myshell.c}, \hyperpage{29}
+  \item {error\_stream}
+    \subitem {ls.c}, \hyperpage{17}
+  \item {exit\_command}
+    \subitem {myshell.c}, \hyperpage{24}
+
+  \indexspace
+
+  \item {file}, \hyperpage{5}
+    \subitem {name}, \hyperpage{5}
+    \subitem {pun}, \hyperpage{5}
+    \subitem {sb}, \hyperpage{5}
+  \item {FILE\_NAME}
+    \subitem {history.c}, \hyperpage{9}
+  \item {filename}
+    \subitem {myshell.c}, \hyperpage{22}
+  \item {FILES}
+    \subitem {ls.c}, \hyperpage{13}
+  \item {free\_list}
+    \subitem {ls.c}, \hyperpage{14}
+
+  \indexspace
+
+  \item {H\_READ}
+    \subitem {myshell.c}, \hyperpage{22}
+  \item {help}
+    \subitem {option}, \hyperpage{6}
+  \item {history}
+    \subitem {history.c}, \hyperpage{10}
+  \item {history.c}
+    \subitem {FILE\_NAME}, \hyperpage{9}
+    \subitem {history}, \hyperpage{10}
+    \subitem {main}, \hyperpage{10}
+    \subitem {MAX\_LINE}, \hyperpage{10}
+
+  \indexspace
+
+  \item {l\_info}
+    \subitem {option}, \hyperpage{7}
+  \item {loop}
+    \subitem {myshell.c}, \hyperpage{24}
+  \item {ls.c}
+    \subitem {add\_to\_list}, \hyperpage{14}
+    \subitem {ALL}, \hyperpage{13}
+    \subitem {ddir}, \hyperpage{16}
+    \subitem {DIRS}, \hyperpage{13}
+    \subitem {error\_stream}, \hyperpage{17}
+    \subitem {FILES}, \hyperpage{13}
+    \subitem {free\_list}, \hyperpage{14}
+    \subitem {main}, \hyperpage{15}
+    \subitem {MAX\_BUFF}, \hyperpage{14}
+    \subitem {options}, \hyperpage{15}
+    \subitem {print\_error}, \hyperpage{15}
+    \subitem {print\_help}, \hyperpage{16}
+    \subitem {print\_list}, \hyperpage{16}
+
+  \indexspace
+
+  \item {main}
+    \subitem {history.c}, \hyperpage{10}
+    \subitem {ls.c}, \hyperpage{15}
+    \subitem {myshell.c}, \hyperpage{24}
+    \subitem {pwd.c}, \hyperpage{35}
+  \item {MAX\_ARG}
+    \subitem {myshell.c}, \hyperpage{22}
+  \item {MAX\_BUFF}
+    \subitem {ls.c}, \hyperpage{14}
+    \subitem {myshell.c}, \hyperpage{22}
+  \item {MAX\_LINE}
+    \subitem {history.c}, \hyperpage{10}
+  \item {myshell.c}
+    \subitem {bin\_path}, \hyperpage{29}
+    \subitem {cd}, \hyperpage{23}
+    \subitem {clear\_args}, \hyperpage{23}
+    \subitem {default\_name}, \hyperpage{22}
+    \subitem {err\_file\_path}, \hyperpage{29}
+    \subitem {exit\_command}, \hyperpage{24}
+    \subitem {filename}, \hyperpage{22}
+    \subitem {H\_READ}, \hyperpage{22}
+    \subitem {loop}, \hyperpage{24}
+    \subitem {main}, \hyperpage{24}
+    \subitem {MAX\_ARG}, \hyperpage{22}
+    \subitem {MAX\_BUFF}, \hyperpage{22}
+    \subitem {parse\_command}, \hyperpage{24}
+    \subitem {prepare\_history}, \hyperpage{25, 26}
+    \subitem {print\_error}, \hyperpage{26}
+    \subitem {PROMPT}, \hyperpage{22}
+    \subitem {prompt}, \hyperpage{29}
+    \subitem {read\_command}, \hyperpage{26}
+    \subitem {run\_command}, \hyperpage{27}
+    \subitem {setup}, \hyperpage{27, 28}
+    \subitem {sigint\_handler}, \hyperpage{28}
+    \subitem {update\_path}, \hyperpage{28}
+    \subitem {username}, \hyperpage{29}
+
+  \indexspace
+
+  \item {name}
+    \subitem {file}, \hyperpage{5}
+
+  \indexspace
+
+  \item {option}, \hyperpage{6}
+    \subitem {a\_hidden}, \hyperpage{6}
+    \subitem {desired}, \hyperpage{6}
+    \subitem {help}, \hyperpage{6}
+    \subitem {l\_info}, \hyperpage{7}
+  \item {options}
+    \subitem {ls.c}, \hyperpage{15}
+
+  \indexspace
+
+  \item {parse\_command}
+    \subitem {myshell.c}, \hyperpage{24}
+  \item {prepare\_history}
+    \subitem {myshell.c}, \hyperpage{25, 26}
+  \item {print\_error}
+    \subitem {ls.c}, \hyperpage{15}
+    \subitem {myshell.c}, \hyperpage{26}
+  \item {print\_help}
+    \subitem {ls.c}, \hyperpage{16}
+  \item {print\_list}
+    \subitem {ls.c}, \hyperpage{16}
+  \item {PROMPT}
+    \subitem {myshell.c}, \hyperpage{22}
+  \item {prompt}
+    \subitem {myshell.c}, \hyperpage{29}
+  \item {pun}
+    \subitem {file}, \hyperpage{5}
+  \item {pwd.c}
+    \subitem {main}, \hyperpage{35}
+
+  \indexspace
+
+  \item {read\_command}
+    \subitem {myshell.c}, \hyperpage{26}
+  \item {run\_command}
+    \subitem {myshell.c}, \hyperpage{27}
+
+  \indexspace
+
+  \item {sb}
+    \subitem {file}, \hyperpage{5}
+  \item {setup}
+    \subitem {myshell.c}, \hyperpage{27, 28}
+  \item {sigint\_handler}
+    \subitem {myshell.c}, \hyperpage{28}
+  \item {src/history.c}, \hyperpage{9}, \hyperpage{11}
+  \item {src/ls.c}, \hyperpage{12}, \hyperpage{17}
+  \item {src/myshell.c}, \hyperpage{20}, \hyperpage{30}
+  \item {src/pwd.c}, \hyperpage{35, 36}
+
+  \indexspace
+
+  \item {update\_path}
+    \subitem {myshell.c}, \hyperpage{28}
+  \item {username}
+    \subitem {myshell.c}, \hyperpage{29}
+
+\end{theindex}

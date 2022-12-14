@@ -1,0 +1,61 @@
+\hypertarget{pwd_8c_source}{}\doxysection{pwd.\+c}
+\label{pwd_8c_source}\index{src/pwd.c@{src/pwd.c}}
+\mbox{\hyperlink{pwd_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00001}00001 \textcolor{preprocessor}{\#include <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00002}00002 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00003}00003 \textcolor{preprocessor}{\#include <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00004}00004 \textcolor{preprocessor}{\#include <errno.h>}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00005}00005 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00007}00007 \textcolor{comment}{//Get current working path and print it to stdout: returns 0 if it succeded, EOF = -\/1 otherwise}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00013}00013 \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00014}\mbox{\hyperlink{pwd_8c_a0ddf1224851353fc92bfbff6f499fa97}{00014}} \mbox{\hyperlink{pwd_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} *argv[]) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00015}00015     \textcolor{comment}{/* Checks number of arguments (zero arguments expected) */}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00016}00016     \textcolor{keywordflow}{if} (argc > 3) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00017}00017         fprintf(stderr, \textcolor{stringliteral}{"{}Unexpected arguments!\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00018}00018         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00019}00019     \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00020}00020 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00021}00021     \textcolor{comment}{/* Redirects the error output stream to the specified file in the arguments (if present) */}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00022}00022     FILE* \mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = stderr;}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00023}00023 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00024}00024     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < argc; i++) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00025}00025         \textcolor{keywordflow}{if} (strcmp(argv[i], \textcolor{stringliteral}{"{}2>"{}}) == 0) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00026}00026             \textcolor{keywordflow}{if} (argv[i + 1] != NULL) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00027}00027                 \textcolor{keywordflow}{if} ((\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}} = fopen(argv[i + 1], \textcolor{stringliteral}{"{}a"{}})) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00028}00028                     fprintf(stderr,\textcolor{stringliteral}{"{}Error while opening the error output stream\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00029}00029                     exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00030}00030                 \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00031}00031                 \textcolor{comment}{/* Set the error stream to unbeffered */}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00032}00032                 \textcolor{keywordflow}{if} (setvbuf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, NULL, \_IONBF, 0) != 0) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00033}00033                     fprintf(stderr, \textcolor{stringliteral}{"{}Error while setting the error stream as unbuffered: \%s"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00034}00034                     exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00035}00035                 \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00036}00036             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00037}00037                 fprintf(stderr, \textcolor{stringliteral}{"{}Wrong arguments! Did you mean \(\backslash\)"{}2> error\_output\_file\(\backslash\)"{}?\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00038}00038                 exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00039}00039             \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00040}00040         \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00041}00041     \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00042}00042 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00043}00043     \textcolor{keywordtype}{char}* current\_path = NULL;}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00044}00044 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00045}00045     \textcolor{comment}{/* Gets current path and saves it in "{}current\_path"{} string */}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00046}00046     \textcolor{keywordflow}{if} ((current\_path = getcwd(NULL, 0)) == NULL) \{}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00047}00047         fprintf(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}}, \textcolor{stringliteral}{"{}Error: \%s\(\backslash\)n"{}}, strerror(errno));}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00048}00048         exit(EXIT\_FAILURE);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00049}00049     \}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00050}00050 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00051}00051     \textcolor{comment}{/* Prints "{}current\_path"{} string */}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00052}00052     printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, current\_path);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00053}00053     free(current\_path);}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00055}00055     \textcolor{comment}{/* Closes the error stream */}}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00056}00056     fclose(\mbox{\hyperlink{ls_8c_a4feed5e1fee3de1ad87a494b59107eb4}{error\_stream}});}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00057}00057 }
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00058}00058     \textcolor{keywordflow}{return} EXIT\_SUCCESS;}
+\DoxyCodeLine{\Hypertarget{pwd_8c_source_l00059}00059 \}}
+
+\end{DoxyCode}
